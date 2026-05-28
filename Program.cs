@@ -14,6 +14,9 @@ builder.Services.AddSession(options =>
 // Register DbService for dependency injection
 builder.Services.AddScoped<RapidoSur.Services.DbService>();
 
+// Register HttpContextAccessor to enable access to Session inside Razor Views (_Layout)
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
