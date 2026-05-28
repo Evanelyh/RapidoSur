@@ -1,0 +1,169 @@
+@{
+    ViewData["Title"] = "Rastreo de Pedidos Online";
+    var searchPerformed = ViewBag.SearchPerformed as bool? ?? false;
+    var notFound = ViewBag.NotFound as bool? ?? false;
+    var pedido = ViewBag.Pedido as RapidoSur.Models.Pedido;
+    var envio = ViewBag.Envio as RapidoSur.Models.Envio;
+    var historial = ViewBag.Historial as List<RapidoSur.Models.HistorialEstado>;
+}
+
+<div class="tracking-container">
+    <div class="tracking-header">
+        <h1>Rastreo de Envíos en Línea</h1>
+        <p>Consulte el estado de su pedido en tiempo real de forma rápida y sencilla.</p>
+    </div>
+
+    <!-- Barra de Búsqueda -->
+    <div class="glass-card" style="margin-bottom: 2rem; padding: 1.75rem;">
+        <form method="get" action="@Url.Action("Index", "Home")" style="display: flex; gap: 1rem; align-items: flex-end;">
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                <label for="idPedido" class="form-label">Ingrese su Número de Pedido:</label>
+                <input type="number" id="idPedido" name="idPedido" class="form-control" placeholder="Ej. 1" value="@ViewBag.SearchId" required min="1" />
+            </div>
+            <button type="submit" class="btn btn-primary" style="height: 46px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                Consultar Estado
+            </button>
+        </form>
+    </div>
+
+    @if (searchPerformed)
+    {
+        @if (notFound)
+        {
+            <div class="glass-card" style="border-color: var(--danger); text-align: center; padding: 3rem 2rem;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <h3 style="margin-bottom: 0.5rem;">Pedido No Encontrado</h3>
+                <p style="color: var(--text-muted);">El código de pedido <strong>#@ViewBag.SearchId</strong> no está registrado en el sistema logístico. Verifique el número e intente de nuevo.</p>
+            </div>
+        }
+        else if (envio != null)
+        {
+            <!-- PEDIDO ASIGNADO / EN CAMINO / ENTREGADO -->
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Estado del Envío</span>
+                        <h2 style="font-size: 1.75rem; margin-top: 0.25rem;">Pedido #@envio.IdPedido</h2>
+                    </div>
+                    <span class="badge @envio.EstadoEnvio.ToLower().Replace(" ", "-")" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                        @envio.EstadoEnvio
+                    </span>
+                </div>
+
+                <div class="form-row" style="margin-bottom: 1.5rem;">
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Cliente</span>
+                        <strong style="color: #fff;">@envio.ClienteNombre</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Dirección de Destino</span>
+                        <strong style="color: #fff;">@envio.DireccionEntrega</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Tipo de Carga / Peso</span>
+                        <strong style="color: #fff;">@envio.TipoCarga (@envio.PesoKg kg)</strong>
+                    </div>
+                </div>
+
+                <div class="form-row" style="border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Vehículo Asignado</span>
+                        <strong style="color: #fff;">Placa: @envio.VehiculoPlaca</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Conductor a Cargo</span>
+                        <strong style="color: #fff;">@envio.ConductorNombre</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Fecha Estimada de Entrega</span>
+                        <strong style="color: #fff;">@envio.FechaEntregaEstimada?.ToString("dd/MM/yyyy")</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LÍNEA DE TIEMPO ANIMADA -->
+            <div class="glass-card">
+                <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Historial de Estado del Paquete
+                </h3>
+
+                <div class="timeline">
+                    @if (historial != null && historial.Count > 0)
+                    {
+                        var isFirst = true;
+                        @foreach (var h in historial)
+                        {
+                            <div class="timeline-item @(isFirst ? "active" : "")">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">@h.FechaActualizacion.ToString("dd/MM/yyyy hh:mm tt")</div>
+                                    <div class="timeline-title">@h.Estado</div>
+                                    <div class="timeline-desc">@h.Descripcion</div>
+                                    @if (!string.IsNullOrEmpty(h.RegistradoPor))
+                                    {
+                                        <div style="font-size: 0.75rem; color: var(--primary); font-weight: 600; margin-top: 0.5rem;">
+                                            Actualizado por: @h.RegistradoPor
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            isFirst = false;
+                        }
+                    }
+                    else
+                    {
+                        <div class="timeline-item active">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">@envio.FechaAsignacion.ToString("dd/MM/yyyy hh:mm tt")</div>
+                                <div class="timeline-title">Asignado</div>
+                                <div class="timeline-desc">El pedido ha sido asignado al vehículo y conductor correspondientes.</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else if (pedido != null)
+        {
+            <!-- PEDIDO REGISTRADO PERO PENDIENTE DE ASIGNACIÓN -->
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Estado del Envío</span>
+                        <h2 style="font-size: 1.75rem; margin-top: 0.25rem;">Pedido #@pedido.IdPedido</h2>
+                    </div>
+                    <span class="badge pendiente" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                        Pendiente
+                    </span>
+                </div>
+
+                <p style="color: var(--warning); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    Aún no se ha despachado vehículo
+                </p>
+
+                <div class="form-row">
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Cliente</span>
+                        <strong style="color: #fff;">@pedido.ClienteNombre</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Dirección de Entrega</span>
+                        <strong style="color: #fff;">@pedido.DireccionEntrega</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; display: block;">Carga / Peso</span>
+                        <strong style="color: #fff;">@pedido.TipoCarga (@pedido.PesoKg kg)</strong>
+                    </div>
+                </div>
+
+                <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                    El pedido ha sido recibido correctamente en nuestras oficinas. Actualmente nuestro personal operativo está coordinando la mejor ruta y asignando un vehículo de la flota disponible. Le invitamos a consultar el estado más tarde.
+                </div>
+            </div>
+        }
+    }
+</div>

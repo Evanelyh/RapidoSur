@@ -1,0 +1,221 @@
+@{
+    ViewData["Title"] = "Panel del Conductor";
+    var enviosActivos = ViewBag.EnviosActivos as List<RapidoSur.Models.Envio> ?? new();
+    var historialGeneral = ViewBag.HistorialGeneral as List<RapidoSur.Models.Envio> ?? new();
+}
+
+<div class="header-navbar">
+    <div>
+        <h1 class="page-title">Mi Agenda de Entregas</h1>
+        <p class="page-subtitle">Visualice su hoja de ruta digital y actualice el estado de los envíos asignados en tiempo real.</p>
+    </div>
+</div>
+
+<div class="form-row">
+    <!-- COLUMNA PRINCIPAL: ENVÍOS EN CURSO (HOJA DE RUTA DIGITAL) -->
+    <div style="flex: 2;">
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                Hoja de Ruta Digital (Entregas Pendientes)
+            </h3>
+
+            @if (enviosActivos.Count > 0)
+            {
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    @foreach (var e in enviosActivos)
+                    {
+                        <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; transition: var(--transition);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                                <div>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">ENVÍO COD. #@e.IdEnvio</span>
+                                    <h4 style="font-size: 1.15rem; margin-top: 0.15rem; color: #fff;">Pedido #@e.IdPedido - @e.ClienteNombre</h4>
+                                </div>
+                                <span class="badge @e.EstadoEnvio.ToLower().Replace(" ", "-")">@e.EstadoEnvio</span>
+                            </div>
+
+                            <div class="form-row" style="font-size: 0.85rem; margin-bottom: 1rem;">
+                                <div>
+                                    <span style="color: var(--text-muted); display: block;">Dirección de Entrega:</span>
+                                    <strong style="color: #fff;">@e.DireccionEntrega</strong>
+                                </div>
+                                <div>
+                                    <span style="color: var(--text-muted); display: block;">Tipo de Carga / Peso:</span>
+                                    <strong style="color: #fff;">@e.TipoCarga (@e.PesoKg kg)</strong>
+                                </div>
+                                <div>
+                                    <span style="color: var(--text-muted); display: block;">Fecha Estimada:</span>
+                                    <strong style="color: #fff;">@e.FechaEntregaEstimada?.ToString("dd/MM/yyyy")</strong>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(e.RutaDescripcion))
+                            {
+                                <div style="font-size: 0.8rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 0.75rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; color: var(--text-muted);">
+                                    <strong style="color: #fff; display: block; margin-bottom: 0.25rem;">Indicación de Ruta:</strong>
+                                    @e.RutaDescripcion
+                                </div>
+                            }
+
+                            <!-- BOTONES DE ACCIÓN LOGÍSTICA (CU-05 / CU-06 / CU-07) -->
+                            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap;">
+                                @if (e.EstadoEnvio == "Asignado")
+                                {
+                                    <form method="post" action="@Url.Action("UpdateStatus", "Driver")">
+                                        <input type="hidden" name="idEnvio" value="@e.IdEnvio" />
+                                        <input type="hidden" name="estado" value="En Ruta" />
+                                        <input type="hidden" name="descripcion" value="El conductor inició formalmente la ruta de despacho desde el centro logístico." />
+                                        <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">
+                                            Iniciar Ruta de Entrega
+                                        </button>
+                                    </form>
+                                }
+                                else if (e.EstadoEnvio == "En Ruta" || e.EstadoEnvio == "Con Incidencia" || e.EstadoEnvio == "Reprogramado")
+                                {
+                                    <!-- Reportar Incidencia (Abre Modal) -->
+                                    <button type="button" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="openIncidentModal(@e.IdEnvio)">
+                                        Reportar Incidencia
+                                    </button>
+
+                                    <!-- Reprogramar (Abre Modal) -->
+                                    <button type="button" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="openReprogramModal(@e.IdEnvio)">
+                                        Reprogramar
+                                    </button>
+
+                                    <!-- Completar Entrega -->
+                                    <form method="post" action="@Url.Action("UpdateStatus", "Driver")">
+                                        <input type="hidden" name="idEnvio" value="@e.IdEnvio" />
+                                        <input type="hidden" name="estado" value="Entregado" />
+                                        <input type="hidden" name="descripcion" value="Entrega completada exitosamente al cliente. Carga entregada y recibida a satisfacción." />
+                                        <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem; background: var(--accent); box-shadow: 0 4px 15px 0 rgba(16, 185, 129, 0.4);">
+                                            Completar Entrega
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div style="text-align: center; color: var(--text-muted); padding: 4rem 2rem;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; color: var(--accent);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <h4 style="color: #fff; margin-bottom: 0.25rem;">¡Agenda al Día!</h4>
+                    <p>No tiene envíos pendientes asignados para hoy. Disfrute su descanso.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- COLUMNA LATERAL: HISTORIAL DE ENTREGAS COMPLETADAS -->
+    <div style="flex: 1;">
+        <div class="glass-card">
+            <h3 style="margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); font-size: 1.15rem; color: #fff;">
+                Historial de Entregas Realizadas
+            </h3>
+            
+            @if (historialGeneral.Count > 0)
+            {
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
+                    @foreach (var h in historialGeneral)
+                    {
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 0.75rem 1rem; border-radius: var(--radius-sm);">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+                                <span>Pedido #@h.IdPedido</span>
+                                <span style="color: var(--accent); font-weight: 600;">Entregado</span>
+                            </div>
+                            <strong style="font-size: 0.85rem; color: #fff; display: block;">@h.ClienteNombre</strong>
+                            <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">@h.DireccionEntrega</span>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 2rem 0;">Aún no hay entregas en su historial.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: REGISTRAR INCIDENCIA (CU-07) -->
+<div class="modal-overlay" id="incidentModal">
+    <div class="glass-card modal-content" style="background: #111827; padding: 2rem;">
+        <h3 style="margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">Registrar Incidencia</h3>
+        
+        <form method="post" action="@Url.Action("ReportIncident", "Driver")">
+            <input type="hidden" id="incidentEnvioId" name="idEnvio" />
+            
+            <div class="form-group">
+                <label for="tipoIncidencia" class="form-label">Tipo de Incidencia:</label>
+                <select id="tipoIncidencia" name="tipoIncidencia" class="form-control" required>
+                    <option value="Cliente Ausente">Cliente Ausente / No responde</option>
+                    <option value="Accidente Vial">Accidente de Tránsito</option>
+                    <option value="Dirección Incorrecta">Dirección Incorrecta o Incompleta</option>
+                    <option value="Avería de Vehículo">Falla mecánica en el Camión</option>
+                    <option value="Tráfico / Retraso Mayor">Congestionamiento Vial Grave</option>
+                    <option value="Otros">Otros Motivos</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion" class="form-label">Detalle del Incidente:</label>
+                <textarea id="descripcion" name="descripcion" class="form-control" rows="3" placeholder="Describa brevemente qué ocurrió para que el operador logístico lo resuelva..." required></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                <button type="button" class="btn btn-secondary" onclick="closeIncidentModal()">Cancelar</button>
+                <button type="submit" class="btn btn-danger">Registrar Incidencia</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: REPROGRAMAR ENTREGA (CU-06) -->
+<div class="modal-overlay" id="reprogramModal">
+    <div class="glass-card modal-content" style="background: #111827; padding: 2rem;">
+        <h3 style="margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">Reprogramar Entrega</h3>
+        
+        <form method="post" action="@Url.Action("Reprogram", "Driver")">
+            <input type="hidden" id="reprogramEnvioId" name="idEnvio" />
+            
+            <div class="form-group">
+                <label for="nuevaFecha" class="form-label">Nueva Fecha Propuesta:</label>
+                <input type="date" id="nuevaFecha" name="nuevaFecha" class="form-control" required min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" value="@DateTime.Now.AddDays(2).ToString("yyyy-MM-dd")" />
+            </div>
+
+            <div class="form-group">
+                <label for="motivo" class="form-label">Motivo de la Reprogramación:</label>
+                <textarea id="motivo" name="motivo" class="form-control" rows="3" placeholder="Ej. Cliente solicitó entrega para otro día, reprogramado por avería mecánica..." required></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                <button type="button" class="btn btn-secondary" onclick="closeReprogramModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Reprogramar Fecha</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Controladores de Ventana de Incidencias
+    function openIncidentModal(id) {
+        document.getElementById('incidentEnvioId').value = id;
+        document.getElementById('incidentModal').style.display = 'flex';
+    }
+    
+    function closeIncidentModal() {
+        document.getElementById('incidentModal').style.display = 'none';
+    }
+    
+    // Controladores de Ventana de Reprogramaciones
+    function openReprogramModal(id) {
+        document.getElementById('reprogramEnvioId').value = id;
+        document.getElementById('reprogramModal').style.display = 'flex';
+    }
+    
+    function closeReprogramModal() {
+        document.getElementById('reprogramModal').style.display = 'none';
+    }
+</script>

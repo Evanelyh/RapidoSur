@@ -1,0 +1,21 @@
+## Ignore Visual Studio & .NET temporary files
+[Ob]bj/
+[Bb]in/
+[Oo]ut/
+[Pp]ublish/
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Ignore OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## Ignore local environment settings
+appsettings.Development.json
+.env
+.env.local

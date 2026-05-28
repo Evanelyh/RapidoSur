@@ -1,0 +1,173 @@
+@model RapidoSur.Models.AsignacionViewModel
+@{
+    ViewData["Title"] = "Asignación de Flota y Conductor";
+}
+
+<div class="header-navbar">
+    <div>
+        <h1 class="page-title">Asignación de Flota y Conductor</h1>
+        <p class="page-subtitle">Coordine y planifique el despacho asociando un pedido con un vehículo y conductor disponible.</p>
+    </div>
+</div>
+
+<!-- Barra de alertas rápidas -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); padding: 0.75rem 1rem; color: var(--danger); font-size: 0.85rem; margin-bottom: 1.5rem;">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<form method="post" action="@Url.Action("AssignVehicle", "Operator")" id="dispatchForm">
+    <div class="form-row">
+        <!-- COLUMNA 1: SELECCIÓN DEL PEDIDO -->
+        <div class="glass-card" style="flex: 1.2;">
+            <h3 style="margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 8 14"></polyline></svg>
+                1. Selección de Pedido Pendiente
+            </h3>
+
+            <div class="form-group">
+                <label for="idPedido" class="form-label">Buscar Pedido:</label>
+                <select id="idPedido" name="idPedido" class="form-control" required onchange="onOrderSelect()">
+                    <option value="">-- Seleccionar Pedido --</option>
+                    @foreach (var p in Model.PedidosPendientes)
+                    {
+                        <option value="@p.IdPedido" data-weight="@p.PesoKg" data-type="@p.TipoCarga" data-dest="@p.DireccionEntrega">
+                            Pedido #@p.IdPedido - @p.ClienteNombre (@p.PesoKg kg)
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <!-- DETALLES DINÁMICOS DEL PEDIDO -->
+            <div id="orderCard" style="display: none; background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; margin-top: 1.5rem;">
+                <h4 style="font-size: 1rem; margin-bottom: 0.75rem; color: #fff;">Resumen del Pedido Seleccionado:</h4>
+                <div style="font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div>
+                        <span style="color: var(--text-muted);">Tipo de Carga:</span>
+                        <strong id="lblCarga" style="color: #fff;">-</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted);">Peso del Envío:</span>
+                        <strong id="lblPeso" style="color: #fff;">-</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted);">Destino de Entrega:</span>
+                        <strong id="lblDestino" style="color: #fff;">-</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA 2: ASIGNACIÓN DE RECURSOS (VEHÍCULO Y CONDUCTOR) -->
+        <div class="glass-card" style="flex: 1.5;">
+            <h3 style="margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path d="M13 9H4a2 2 0 00-2 2v5a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 012-2h7a2 2 0 012 2v3a2 2 0 002 2h1a2 2 0 002-2v-5a2 2 0 00-2-2h-3"></path></svg>
+                2. Asignación de Recursos Logísticos
+            </h3>
+
+            <!-- REGRE DE NEGOCIO: FILTRADO DE FLOTA DISPONIBLE (CU-04) -->
+            <div class="form-group">
+                <label for="idVehiculo" class="form-label">Vehículo Disponible:</label>
+                <select id="idVehiculo" name="idVehiculo" class="form-control" required onchange="checkCapacity()">
+                    <option value="">-- Seleccionar Unidad --</option>
+                    @foreach (var v in Model.VehiculosDisponibles)
+                    {
+                        <option value="@v.IdVehiculo" data-capacity="@v.CapacidadCargaKg">
+                            @v.Marca @v.Modelo (@v.Placa) - Cap: @v.CapacidadCargaKg kg
+                        </option>
+                    }
+                </select>
+                
+                <!-- Alerta de Capacidad Dinámica -->
+                <div id="capacityAlert" style="display: none; margin-top: 0.5rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem; color: var(--danger); font-size: 0.8rem;">
+                    <strong>⚠️ ¡Alerta de Capacidad!</strong> El camión seleccionado tiene menor capacidad que el peso del pedido. Seleccione una unidad de carga mayor.
+                </div>
+            </div>
+
+            <!-- REGRE DE NEGOCIO: FILTRADO DE CHOFER DISPONIBLE (CU-04) -->
+            <div class="form-group">
+                <label for="idConductor" class="form-label">Conductor Disponible:</label>
+                <select id="idConductor" name="idConductor" class="form-control" required>
+                    <option value="">-- Seleccionar Conductor --</option>
+                    @foreach (var c in Model.ConductoresDisponibles)
+                    {
+                        <option value="@c.IdConductor">
+                            @c.Nombre @c.Apellido - Licencia: @c.NumLicencia (@c.TipoLicencia)
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fechaEntregaEstimada" class="form-label">Fecha Estimada de Entrega:</label>
+                    <input type="date" id="fechaEntregaEstimada" name="fechaEntregaEstimada" class="form-control" required value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="rutaDescripcion" class="form-label">Descripción de la Ruta de Despacho:</label>
+                <textarea id="rutaDescripcion" name="rutaDescripcion" class="form-control" rows="2" placeholder="Ej. Carretera Panamericana hacia San Salvador, ingresar por autopista sur..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                <a asp-action="Dashboard" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" id="btnSubmit" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Generar Orden y Hoja Virtual
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function onOrderSelect() {
+        const select = document.getElementById('idPedido');
+        const option = select.options[select.selectedIndex];
+        
+        const card = document.getElementById('orderCard');
+        if (select.value === "") {
+            card.style.display = 'none';
+        } else {
+            card.style.display = 'block';
+            document.getElementById('lblCarga').innerText = option.getAttribute('data-type');
+            document.getElementById('lblPeso').innerText = option.getAttribute('data-weight') + ' kg';
+            document.getElementById('lblDestino').innerText = option.getAttribute('data-dest');
+        }
+        checkCapacity();
+    }
+
+    function checkCapacity() {
+        const selectPedido = document.getElementById('idPedido');
+        const selectVehiculo = document.getElementById('idVehiculo');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const alertDiv = document.getElementById('capacityAlert');
+
+        if (selectPedido.value === "" || selectVehiculo.value === "") {
+            alertDiv.style.display = 'none';
+            btnSubmit.disabled = false;
+            return;
+        }
+
+        const optionPedido = selectPedido.options[selectPedido.selectedIndex];
+        const optionVehiculo = selectVehiculo.options[selectVehiculo.selectedIndex];
+
+        const peso = parseFloat(optionPedido.getAttribute('data-weight'));
+        const capacidad = parseFloat(optionVehiculo.getAttribute('data-capacity'));
+
+        if (capacidad < peso) {
+            alertDiv.style.display = 'block';
+            btnSubmit.disabled = true;
+            btnSubmit.style.opacity = '0.5';
+            btnSubmit.style.cursor = 'not-allowed';
+        } else {
+            alertDiv.style.display = 'none';
+            btnSubmit.disabled = false;
+            btnSubmit.style.opacity = '1';
+            btnSubmit.style.cursor = 'pointer';
+        }
+    }
+</script>

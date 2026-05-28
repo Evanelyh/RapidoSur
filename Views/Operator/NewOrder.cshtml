@@ -1,0 +1,178 @@
+@{
+    ViewData["Title"] = "Registrar Nuevo Pedido";
+    var clientes = ViewBag.Clientes as List<RapidoSur.Models.Cliente> ?? new();
+}
+
+<div class="header-navbar">
+    <div>
+        <h1 class="page-title">Registrar Nuevo Pedido</h1>
+        <p class="page-subtitle">Reemplace las planillas físicas y registre los datos digitalmente en el sistema.</p>
+    </div>
+</div>
+
+<form method="post" action="@Url.Action("NewOrder", "Operator")">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); padding: 0.75rem 1rem; color: var(--danger); font-size: 0.85rem; margin-bottom: 1.5rem;" asp-validation-summary="All">
+        </div>
+    }
+
+    <div class="form-row">
+        <!-- BLOQUE 1: DATOS DEL CLIENTE -->
+        <div class="glass-card" style="flex: 1;">
+            <h3 style="margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                1. Información del Cliente
+            </h3>
+
+            <!-- Tipo de cliente -->
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label class="form-label">Tipo de Cliente:</label>
+                <div style="display: flex; gap: 1.5rem; margin-top: 0.25rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="radio" name="clientType" value="Existente" checked onclick="toggleClientType('Existente')" style="accent-color: var(--primary);" />
+                        Cliente Registrado
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="radio" name="clientType" value="Nuevo" onclick="toggleClientType('Nuevo')" style="accent-color: var(--primary);" />
+                        Nuevo Cliente
+                    </label>
+                </div>
+            </div>
+
+            <!-- CLIENTE EXISTENTE (DROPDOWN) -->
+            <div id="secClientExistente" class="form-group">
+                <label for="idCliente" class="form-label">Seleccionar Cliente:</label>
+                <select id="idCliente" name="idCliente" class="form-control">
+                    <option value="">-- Buscar cliente --</option>
+                    @foreach (var c in clientes)
+                    {
+                        <option value="@c.IdCliente">@c.Nombre @c.Apellido (@c.Telefono)</option>
+                    }
+                </select>
+            </div>
+
+            <!-- CLIENTE NUEVO (FORMULARIO COMPLETO) -->
+            <div id="secClientNuevo" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre" class="form-label">Nombre del Cliente:</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej. Juan" />
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido" class="form-label">Apellido del Cliente:</label>
+                        <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Ej. Ramos" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefono" class="form-label">Teléfono:</label>
+                        <input type="text" id="telefono" name="telefono" class="form-control" placeholder="Ej. 7000-1111" />
+                    </div>
+                    <div class="form-group">
+                        <label for="correo" class="form-label">Correo Electrónico:</label>
+                        <input type="email" id="correo" name="correo" class="form-control" placeholder="Ej. juan@gmail.com" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccion" class="form-label">Dirección Principal:</label>
+                    <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ej. Colonia Escalón, San Salvador" />
+                </div>
+            </div>
+        </div>
+
+        <!-- BLOQUE 2: DATOS DEL ENVÍO -->
+        <div class="glass-card" style="flex: 1.2;">
+            <h3 style="margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                2. Detalles de la Carga y Entrega
+            </h3>
+
+            <div class="form-group">
+                <label for="direccionEntrega" class="form-label">Dirección de Destino:</label>
+                <input type="text" id="direccionEntrega" name="direccionEntrega" class="form-control" placeholder="Dirección detallada donde se entregará el paquete" required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tipoCarga" class="form-label">Tipo de Carga:</label>
+                    <select id="tipoCarga" name="tipoCarga" class="form-control" required>
+                        <option value="Electrónica">Electrónica</option>
+                        <option value="Alimentos">Alimentos (Refrigerado)</option>
+                        <option value="Ropa">Ropa / Textil</option>
+                        <option value="Químicos">Químicos / Inflamables</option>
+                        <option value="Electrodomésticos">Electrodomésticos</option>
+                        <option value="Muebles">Muebles de Oficina</option>
+                        <option value="Medicamentos">Medicamentos</option>
+                        <option value="Ferretería">Ferretería / Construcción</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="pesoKg" class="form-label">Peso Total (kg):</label>
+                    <input type="number" id="pesoKg" name="pesoKg" class="form-control" placeholder="Ej. 150" required min="1" step="0.01" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Prioridad de Despacho:</label>
+                <div style="display: flex; gap: 2rem; margin-top: 0.25rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="radio" name="prioridad" value="Baja" style="accent-color: var(--accent);" />
+                        Baja
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="radio" name="prioridad" value="Media" checked style="accent-color: var(--warning);" />
+                        Media
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="radio" name="prioridad" value="Alta" style="accent-color: var(--danger);" />
+                        Alta
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="observaciones" class="form-label">Observaciones Logísticas:</label>
+                <textarea id="observaciones" name="observaciones" class="form-control" rows="3" placeholder="Indicaciones especiales de entrega (Ej. Cuidado frágil, entregar por la tarde, etc.)"></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                <a asp-action="Dashboard" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    Guardar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function toggleClientType(type) {
+        const secExistente = document.getElementById('secClientExistente');
+        const secNuevo = document.getElementById('secClientNuevo');
+        
+        if (type === 'Existente') {
+            secExistente.style.display = 'block';
+            secNuevo.style.display = 'none';
+            document.getElementById('idCliente').required = true;
+            
+            document.getElementById('nombre').required = false;
+            document.getElementById('apellido').required = false;
+        } else {
+            secExistente.style.display = 'none';
+            secNuevo.style.display = 'block';
+            document.getElementById('idCliente').required = false;
+            
+            document.getElementById('nombre').required = true;
+            document.getElementById('apellido').required = true;
+        }
+    }
+    
+    // Inicializar campos obligatorios
+    toggleClientType('Existente');
+</script>
