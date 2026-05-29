@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
@@ -14,9 +14,9 @@ namespace RapidoSurWinForms
             return new SqlConnection(ConnectionString);
         }
 
-        // ==========================================
-        // 1. GESTIÓN DE CLIENTES
-        // ==========================================
+        
+        
+        
         public List<Cliente> GetClientes()
         {
             var list = new List<Cliente>();
@@ -78,9 +78,9 @@ namespace RapidoSurWinForms
             return Convert.ToInt32(cmd.ExecuteScalar());
         }
 
-        // ==========================================
-        // 2. GESTIÓN DE PEDIDOS
-        // ==========================================
+        
+        
+        
         public List<Pedido> GetPedidos(string? estado = null)
         {
             var list = new List<Pedido>();
@@ -181,9 +181,9 @@ namespace RapidoSurWinForms
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        // ==========================================
-        // 3. GESTIÓN DE VEHÍCULOS
-        // ==========================================
+        
+        
+        
         public List<Vehiculo> GetVehiculos(string? estado = null)
         {
             var list = new List<Vehiculo>();
@@ -228,9 +228,9 @@ namespace RapidoSurWinForms
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        // ==========================================
-        // 4. GESTIÓN DE CONDUCTORES
-        // ==========================================
+        
+        
+        
         public List<Conductor> GetConductores(bool? disponible = null)
         {
             var list = new List<Conductor>();
@@ -275,9 +275,9 @@ namespace RapidoSurWinForms
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        // ==========================================
-        // 5. AUTENTICACIÓN
-        // ==========================================
+        
+        
+        
         public Operador? Login(string usuario, string clave)
         {
             using var conn = GetConnection();
@@ -324,9 +324,9 @@ namespace RapidoSurWinForms
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        // ==========================================
-        // 6. GESTIÓN DE ENVÍOS Y SEGUIMIENTO
-        // ==========================================
+        
+        
+        
         public List<Envio> GetEnvios(string? estado = null, int? idConductor = null)
         {
             var list = new List<Envio>();
@@ -483,7 +483,7 @@ namespace RapidoSurWinForms
             using var transaction = conn.BeginTransaction();
             try
             {
-                // 1. Insertar el Envío
+                
                 string query = @"INSERT INTO envio (id_pedido, id_vehiculo, id_conductor, id_operador, fecha_asignacion, fecha_entrega_estimada, ruta_descripcion, estado_envio) 
                                  VALUES (@id_pedido, @id_vehiculo, @id_conductor, @id_operador, GETDATE(), @fecha_est, @ruta, 'Asignado');
                                  SELECT SCOPE_IDENTITY();";
@@ -498,22 +498,22 @@ namespace RapidoSurWinForms
                 
                 int idEnvio = Convert.ToInt32(cmd.ExecuteScalar());
 
-                // 2. Actualizar estado del Pedido a 'Asignado'
+                
                 using var cmdPedido = new SqlCommand("UPDATE pedido SET estado = 'Asignado' WHERE id_pedido = @id_pedido", conn, transaction);
                 cmdPedido.Parameters.AddWithValue("@id_pedido", e.IdPedido);
                 cmdPedido.ExecuteNonQuery();
 
-                // 3. Actualizar estado del Vehículo a 'En Ruta'
+                
                 using var cmdVehiculo = new SqlCommand("UPDATE vehiculo SET estado_operativo = 'En Ruta' WHERE id_vehiculo = @id_vehiculo", conn, transaction);
                 cmdVehiculo.Parameters.AddWithValue("@id_vehiculo", e.IdVehiculo);
                 cmdVehiculo.ExecuteNonQuery();
 
-                // 4. Actualizar disponibilidad del Conductor a 0 (FALSE en SQL Server)
+                
                 using var cmdCond = new SqlCommand("UPDATE conductor SET disponible = 0 WHERE id_conductor = @id_conductor", conn, transaction);
                 cmdCond.Parameters.AddWithValue("@id_conductor", e.IdConductor);
                 cmdCond.ExecuteNonQuery();
 
-                // 5. Insertar en Historial de Estados
+                
                 string histQuery = @"INSERT INTO historial_estado (id_envio, estado, fecha_actualizacion, descripcion, registrado_por) 
                                      VALUES (@id_envio, 'Asignado', GETDATE(), @desc, @operador)";
                 using var cmdHist = new SqlCommand(histQuery, conn, transaction);
@@ -542,7 +542,7 @@ namespace RapidoSurWinForms
                 var envio = GetEnvio(idEnvio);
                 if (envio == null) return false;
 
-                // 1. Actualizar el estado del envío
+                
                 string query = "UPDATE envio SET estado_envio = @estado";
                 if (estado == "Entregado")
                 {
@@ -563,28 +563,28 @@ namespace RapidoSurWinForms
                 }
                 cmd.ExecuteNonQuery();
 
-                // 2. Actualizar el estado del pedido asociado
+                
                 using var cmdPedido = new SqlCommand("UPDATE pedido SET estado = @estado WHERE id_pedido = @id_pedido", conn, transaction);
                 cmdPedido.Parameters.AddWithValue("@estado", estado);
                 cmdPedido.Parameters.AddWithValue("@id_pedido", envio.IdPedido);
                 cmdPedido.ExecuteNonQuery();
 
-                // 3. Si el estado es final (Entregado, etc.), liberar vehículo y chofer
+                
                 if (estado == "Entregado")
                 {
-                    // Liberar vehículo
+                    
                     using var cmdVeh = new SqlCommand("UPDATE vehiculo SET estado_operativo = 'Disponible' WHERE id_vehiculo = @id_veh", conn, transaction);
                     cmdVeh.Parameters.AddWithValue("@id_veh", envio.IdVehiculo);
                     cmdVeh.ExecuteNonQuery();
 
-                    // Liberar conductor (disponible = 1 en SQL Server)
+                    
                     using var cmdCond = new SqlCommand("UPDATE conductor SET disponible = 1 WHERE id_conductor = @id_cond", conn, transaction);
                     cmdCond.Parameters.AddWithValue("@id_cond", envio.IdConductor);
                     cmdCond.ExecuteNonQuery();
                 }
                 else if (estado == "En Ruta")
                 {
-                    // Asegurar que el vehículo está marcado como 'En Ruta' y el conductor 'no disponible' (0)
+                    
                     using var cmdVeh = new SqlCommand("UPDATE vehiculo SET estado_operativo = 'En Ruta' WHERE id_vehiculo = @id_veh", conn, transaction);
                     cmdVeh.Parameters.AddWithValue("@id_veh", envio.IdVehiculo);
                     cmdVeh.ExecuteNonQuery();
@@ -594,7 +594,7 @@ namespace RapidoSurWinForms
                     cmdCond.ExecuteNonQuery();
                 }
 
-                // 4. Insertar historial de actualización
+                
                 string histQuery = @"INSERT INTO historial_estado (id_envio, estado, fecha_actualizacion, descripcion, registrado_por) 
                                      VALUES (@id_envio, @estado, GETDATE(), @desc, @user)";
                 using var cmdHist = new SqlCommand(histQuery, conn, transaction);
@@ -639,9 +639,9 @@ namespace RapidoSurWinForms
             return list;
         }
 
-        // ==========================================
-        // 7. GENERACIÓN DE REPORTES LOGÍSTICOS
-        // ==========================================
+        
+        
+        
         public List<Dictionary<string, object>> RunReport(string tipo, DateTime inicio, DateTime fin)
         {
             var list = new List<Dictionary<string, object>>();
@@ -691,7 +691,7 @@ namespace RapidoSurWinForms
                           GROUP BY v.id_vehiculo, v.placa, v.tipo, v.capacidad_carga_kg, v.estado_operativo, v.marca, v.modelo
                           ORDER BY COUNT(e.id_envio) DESC";
             }
-            else // "Pedidos"
+            else 
             {
                 query = @"SELECT p.id_pedido AS 'ID Pedido', 
                           CONCAT(c.nombre, ' ', c.apellido) AS 'Cliente',

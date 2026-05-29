@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace RapidoSurWinForms
         private readonly DbService _db = new DbService();
         private List<Envio> activeEnvios = new();
 
-        // UI Controls
+        
         private Panel headerPanel;
         private Label lblDriverWelcome;
         private Label lblDriverSub;
@@ -19,7 +19,7 @@ namespace RapidoSurWinForms
         private Label lblActiveShipments;
         private DataGridView dgvActiveShipments;
 
-        // Action controls
+        
         private GroupBox gbActions;
         private Label lblEstado;
         private ComboBox cbEstados;
@@ -52,17 +52,17 @@ namespace RapidoSurWinForms
             this.Text = "Terminal Logística del Conductor - Rápido Sur S.R.L.";
             this.Size = new Size(950, 600);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.BackColor = Color.FromArgb(11, 15, 12); // Deep Dark forest background
+            this.BackColor = Color.FromArgb(11, 15, 12); 
             this.FormClosing += (s, e) => Application.Exit();
 
-            // ==========================================
-            // HEADER PANEL
-            // ==========================================
+            
+            
+            
             headerPanel = new Panel
             {
                 Dock = DockStyle.Top,
                 Height = 70,
-                BackColor = Color.FromArgb(20, 28, 22) // Moss Header
+                BackColor = Color.FromArgb(20, 28, 22) 
             };
             this.Controls.Add(headerPanel);
 
@@ -70,7 +70,7 @@ namespace RapidoSurWinForms
             {
                 Text = $"CHOFER: {Session.UserName}",
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                ForeColor = Color.FromArgb(57, 211, 83), // Vibrant Apple Green
+                ForeColor = Color.FromArgb(57, 211, 83), 
                 Location = new Point(20, 10),
                 Size = new Size(500, 25),
                 TextAlign = ContentAlignment.MiddleLeft
@@ -81,7 +81,7 @@ namespace RapidoSurWinForms
             {
                 Text = $"Licencia: {Session.UserLicence} | Terminal de Campo Móvil",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Regular),
-                ForeColor = Color.FromArgb(150, 170, 155), // Moss Gray
+                ForeColor = Color.FromArgb(150, 170, 155), 
                 Location = new Point(20, 38),
                 Size = new Size(500, 20),
                 TextAlign = ContentAlignment.MiddleLeft
@@ -104,9 +104,9 @@ namespace RapidoSurWinForms
             btnLogout.Click += btnLogout_Click;
             headerPanel.Controls.Add(btnLogout);
 
-            // ==========================================
-            // MAIN LAYOUT TABLE (Dynamic dual-column scaling)
-            // ==========================================
+            
+            
+            
             TableLayoutPanel mainLayout = new TableLayoutPanel
             {
                 Location = new Point(20, 85),
@@ -116,13 +116,13 @@ namespace RapidoSurWinForms
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
                 BackColor = Color.Transparent
             };
-            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));   // Left Grid column (stretches)
-            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 410f));   // Right Groupboxes column (fixed width)
+            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));   
+            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 410f));   
             this.Controls.Add(mainLayout);
 
-            // ==========================================
-            // LEFT PANEL: ACTIVE SHIPMENTS GRID
-            // ==========================================
+            
+            
+            
             Panel gridContainer = new Panel
             {
                 Dock = DockStyle.Fill,
@@ -144,7 +144,7 @@ namespace RapidoSurWinForms
             dgvActiveShipments = new DataGridView
             {
                 Dock = DockStyle.Fill,
-                BackgroundColor = Color.FromArgb(20, 28, 22), // Moss Dark grid
+                BackgroundColor = Color.FromArgb(20, 28, 22), 
                 ForeColor = Color.White,
                 GridColor = Color.FromArgb(30, 42, 33),
                 BorderStyle = BorderStyle.None,
@@ -162,15 +162,15 @@ namespace RapidoSurWinForms
             dgvActiveShipments.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             dgvActiveShipments.DefaultCellStyle.BackColor = Color.FromArgb(20, 28, 22);
             dgvActiveShipments.DefaultCellStyle.ForeColor = Color.White;
-            dgvActiveShipments.DefaultCellStyle.SelectionBackColor = Color.FromArgb(57, 211, 83); // Apple Green Selection
-            dgvActiveShipments.DefaultCellStyle.SelectionForeColor = Color.Black; // Dark text
+            dgvActiveShipments.DefaultCellStyle.SelectionBackColor = Color.FromArgb(57, 211, 83); 
+            dgvActiveShipments.DefaultCellStyle.SelectionForeColor = Color.Black; 
             dgvActiveShipments.SelectionChanged += dgvActiveShipments_SelectionChanged;
             gridContainer.Controls.Add(dgvActiveShipments);
 
-            // Ensure grid draws over the label or correctly docks
+            
             dgvActiveShipments.BringToFront();
 
-            // Setup grid columns
+            
             dgvActiveShipments.Columns.Add("IdEnvio", "ID Envío");
             dgvActiveShipments.Columns.Add("Cliente", "Cliente");
             dgvActiveShipments.Columns.Add("Direccion", "Dirección");
@@ -180,9 +180,9 @@ namespace RapidoSurWinForms
             dgvActiveShipments.Columns["Peso"].Width = 70;
             dgvActiveShipments.Columns["Estado"].Width = 80;
 
-            // ==========================================
-            // RIGHT PANEL: ACTION GROUPBOXES CONTAINER
-            // ==========================================
+            
+            
+            
             Panel actionsContainer = new Panel
             {
                 Dock = DockStyle.Fill,
@@ -191,11 +191,11 @@ namespace RapidoSurWinForms
             };
             mainLayout.Controls.Add(actionsContainer, 1, 0);
 
-            // 1. UPDATE STATE
+            
             gbActions = new GroupBox 
             { 
                 Text = "1. Actualizar Estado de Ruta", 
-                ForeColor = Color.FromArgb(57, 211, 83), // Vibrant Apple Green Header
+                ForeColor = Color.FromArgb(57, 211, 83), 
                 Font = new Font("Segoe UI", 9, FontStyle.Bold), 
                 Location = new Point(15, 0), 
                 Size = new Size(380, 90) 
@@ -211,7 +211,7 @@ namespace RapidoSurWinForms
             btnUpdateStatus.Click += btnUpdateStatus_Click;
             gbActions.Controls.AddRange(new Control[] { lblEstado, cbEstados, btnUpdateStatus });
 
-            // 2. REPORT INCIDENT
+            
             gbIncidents = new GroupBox 
             { 
                 Text = "2. Reportar Incidencia / Retraso", 
@@ -233,7 +233,7 @@ namespace RapidoSurWinForms
             btnReportIncident.Click += btnReportIncident_Click;
             gbIncidents.Controls.AddRange(new Control[] { lblIncidentType, cbIncidentTypes, lblIncidentDesc, txtIncidentDesc, btnReportIncident });
 
-            // 3. REPROGRAM DELIVERY
+            
             gbReprogram = new GroupBox 
             { 
                 Text = "3. Reprogramar Fecha de Entrega", 
@@ -253,14 +253,14 @@ namespace RapidoSurWinForms
             btnReprogram.Click += btnReprogram_Click;
             gbReprogram.Controls.AddRange(new Control[] { lblNuevaFecha, dtpNuevaFecha, lblMotivo, txtMotivo, btnReprogram });
 
-            // FORCE WHITE FORECOLOR programmatically on all child labels to avoid them being drawn in black by system theme overrides
+            
             lblEstado.ForeColor = Color.White;
             lblIncidentType.ForeColor = Color.White;
             lblIncidentDesc.ForeColor = Color.White;
             lblNuevaFecha.ForeColor = Color.White;
             lblMotivo.ForeColor = Color.White;
 
-            // Load data
+            
             RefreshGrid();
         }
 
@@ -269,7 +269,7 @@ namespace RapidoSurWinForms
             try
             {
                 var list = _db.GetEnvios(null, Session.UserId);
-                // Filter out fully completed orders to focus on current work
+                
                 activeEnvios = list.FindAll(e => e.EstadoEnvio != "Entregado");
 
                 dgvActiveShipments.Rows.Clear();
@@ -284,7 +284,7 @@ namespace RapidoSurWinForms
                     );
                 }
 
-                // Desactivar controles si no hay nada seleccionado
+                
                 UpdateControlStates();
             }
             catch (Exception ex)

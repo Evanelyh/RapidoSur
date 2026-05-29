@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -8,23 +8,23 @@ namespace RapidoSurWinForms
     public class LoginForm : Form
     {
         private readonly DbService _db = new DbService();
-        private string _userType = "Operador"; // Default
+        private string _userType = "Operador"; 
 
-        // Controls
+        
         private Panel cardPanel;
         private Label titleLabel;
         private Label subTitleLabel;
         private Button btnTabOperador;
         private Button btnTabConductor;
         
-        // Operator Inputs
+        
         private Panel panelOperador;
         private Label lblUsuario;
         private TextBox txtUsuario;
         private Label lblClave;
         private TextBox txtClave;
         
-        // Conductor Inputs
+        
         private Panel panelConductor;
         private Label lblConductor;
         private ComboBox cbConductor;
@@ -44,24 +44,24 @@ namespace RapidoSurWinForms
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.BackColor = Color.FromArgb(11, 15, 12); // Deep Dark forest background
+            this.BackColor = Color.FromArgb(11, 15, 12); 
 
-            // Glassmorphism Card emulation panel
+            
             cardPanel = new Panel
             {
                 Size = new Size(410, 440),
                 Location = new Point(25, 25),
-                BackColor = Color.FromArgb(20, 28, 22), // Card background (dark forest gray)
+                BackColor = Color.FromArgb(20, 28, 22), 
                 BorderStyle = BorderStyle.None
             };
             this.Controls.Add(cardPanel);
 
-            // Title Icon / Label
+            
             titleLabel = new Label
             {
                 Text = "ACCESO AL SISTEMA",
                 Font = new Font("Segoe UI", 16, FontStyle.Bold),
-                ForeColor = Color.FromArgb(57, 211, 83), // Primary Apple Green
+                ForeColor = Color.FromArgb(57, 211, 83), 
                 Location = new Point(20, 20),
                 Size = new Size(370, 35),
                 TextAlign = ContentAlignment.MiddleCenter
@@ -72,14 +72,14 @@ namespace RapidoSurWinForms
             {
                 Text = "Rápido Sur S.R.L. - Control Logístico",
                 Font = new Font("Segoe UI", 9, FontStyle.Regular),
-                ForeColor = Color.FromArgb(140, 160, 145), // Forest Gray Text
+                ForeColor = Color.FromArgb(140, 160, 145), 
                 Location = new Point(20, 55),
                 Size = new Size(370, 20),
                 TextAlign = ContentAlignment.MiddleCenter
             };
             cardPanel.Controls.Add(subTitleLabel);
 
-            // Tab Selector Buttons
+            
             btnTabOperador = new Button
             {
                 Text = "Operador / Admin",
@@ -88,7 +88,7 @@ namespace RapidoSurWinForms
                 Size = new Size(180, 36),
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.FromArgb(57, 211, 83),
-                ForeColor = Color.Black, // Dark text on bright background
+                ForeColor = Color.Black, 
                 Cursor = Cursors.Hand
             };
             btnTabOperador.FlatAppearance.BorderSize = 0;
@@ -102,7 +102,7 @@ namespace RapidoSurWinForms
                 Location = new Point(210, 95),
                 Size = new Size(180, 36),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(30, 42, 33), // Dark inactive forest tab
+                BackColor = Color.FromArgb(30, 42, 33), 
                 ForeColor = Color.FromArgb(170, 190, 175),
                 Cursor = Cursors.Hand
             };
@@ -110,9 +110,9 @@ namespace RapidoSurWinForms
             btnTabConductor.Click += (s, e) => SwitchTab("Conductor");
             cardPanel.Controls.Add(btnTabConductor);
 
-            // ==========================================
-            // PANEL OPERADOR
-            // ==========================================
+            
+            
+            
             panelOperador = new Panel
             {
                 Location = new Point(20, 150),
@@ -134,10 +134,10 @@ namespace RapidoSurWinForms
                 Font = new Font("Segoe UI", 11),
                 Location = new Point(0, 32),
                 Size = new Size(370, 28),
-                BackColor = Color.FromArgb(15, 22, 17), // Moss black background
+                BackColor = Color.FromArgb(15, 22, 17), 
                 ForeColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle,
-                Text = "lcontreras" // Preloaded for demo ease
+                Text = "lcontreras" 
             };
             panelOperador.Controls.Add(lblUsuario);
             panelOperador.Controls.Add(txtUsuario);
@@ -159,14 +159,14 @@ namespace RapidoSurWinForms
                 ForeColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle,
                 PasswordChar = '•',
-                Text = "lcontreras123" // Preloaded for demo ease
+                Text = "lcontreras123" 
             };
             panelOperador.Controls.Add(lblClave);
             panelOperador.Controls.Add(txtClave);
 
-            // ==========================================
-            // PANEL CONDUCTOR
-            // ==========================================
+            
+            
+            
             panelConductor = new Panel
             {
                 Location = new Point(20, 150),
@@ -196,9 +196,9 @@ namespace RapidoSurWinForms
             panelConductor.Controls.Add(lblConductor);
             panelConductor.Controls.Add(cbConductor);
 
-            // ==========================================
-            // LOGIN BUTTON
-            // ==========================================
+            
+            
+            
             btnLogin = new Button
             {
                 Text = "INGRESAR AL SISTEMA",
@@ -206,15 +206,15 @@ namespace RapidoSurWinForms
                 Location = new Point(20, 320),
                 Size = new Size(370, 46),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(57, 211, 83), // Apple Green button
-                ForeColor = Color.Black, // Black text on green background
+                BackColor = Color.FromArgb(57, 211, 83), 
+                ForeColor = Color.Black, 
                 Cursor = Cursors.Hand
             };
             btnLogin.FlatAppearance.BorderSize = 0;
             btnLogin.Click += btnLogin_Click;
             cardPanel.Controls.Add(btnLogin);
 
-            // DEMO INFO FOOTER
+            
             lblDemoInfo = new Label
             {
                 Text = "Demo Admin: usuario: lcontreras | clave: lcontreras123",
@@ -226,7 +226,7 @@ namespace RapidoSurWinForms
             };
             cardPanel.Controls.Add(lblDemoInfo);
 
-            // Load conductors dropdown list
+            
             LoadConductors();
         }
 
@@ -288,14 +288,14 @@ namespace RapidoSurWinForms
                 var op = _db.Login(usuario, clave);
                 if (op != null)
                 {
-                    // Set Session
+                    
                     Session.IsLoggedIn = true;
                     Session.UserType = "Operador";
                     Session.UserId = op.IdOperador;
                     Session.UserName = op.NombreCompleto;
                     Session.UserRole = op.Rol;
 
-                    // Open MainForm
+                    
                     this.Hide();
                     MainForm main = new MainForm(this);
                     main.Show();
@@ -305,7 +305,7 @@ namespace RapidoSurWinForms
                     MessageBox.Show("Usuario o contraseña incorrectos.", "Error de Acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else // Conductor
+            else 
             {
                 if (cbConductor.SelectedValue == null)
                 {
@@ -316,7 +316,7 @@ namespace RapidoSurWinForms
                 var cond = cbConductor.SelectedItem as Conductor;
                 if (cond != null)
                 {
-                    // Set Session
+                    
                     Session.IsLoggedIn = true;
                     Session.UserType = "Conductor";
                     Session.UserId = cond.IdConductor;
@@ -324,7 +324,7 @@ namespace RapidoSurWinForms
                     Session.UserRole = "Conductor";
                     Session.UserLicence = cond.NumLicencia;
 
-                    // Open DriverForm
+                    
                     this.Hide();
                     DriverForm driver = new DriverForm(this);
                     driver.Show();

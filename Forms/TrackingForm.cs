@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace RapidoSurWinForms
     {
         private readonly DbService _db = new DbService();
 
-        // UI Controls
+        
         private Label lblSearch;
         private TextBox txtPedidoId;
         private Button btnRastrear;
@@ -49,9 +49,9 @@ namespace RapidoSurWinForms
             this.MaximizeBox = false;
             this.BackColor = Color.FromArgb(10, 15, 30);
 
-            // ==========================================
-            // SEARCH BOX
-            // ==========================================
+            
+            
+            
             lblSearch = new Label
             {
                 Text = "INGRESE EL NÚMERO / ID DE PEDIDO QUE LE PROPORCIONÓ LA EMPRESA:",
@@ -88,9 +88,9 @@ namespace RapidoSurWinForms
             btnRastrear.Click += btnRastrear_Click;
             this.Controls.Add(btnRastrear);
 
-            // ==========================================
-            // PANEL: NOT FOUND
-            // ==========================================
+            
+            
+            
             panelNotFound = new Panel
             {
                 Location = new Point(25, 100),
@@ -120,9 +120,9 @@ namespace RapidoSurWinForms
             };
             panelNotFound.Controls.AddRange(new Control[] { lblNotFoundTitle, lblNotFoundDesc });
 
-            // ==========================================
-            // PANEL: PENDING
-            // ==========================================
+            
+            
+            
             panelPending = new Panel
             {
                 Location = new Point(25, 100),
@@ -152,9 +152,9 @@ namespace RapidoSurWinForms
             };
             panelPending.Controls.AddRange(new Control[] { lblPendingTitle, lblPendingDesc });
 
-            // ==========================================
-            // PANEL: DETAILS & TIMELINE
-            // ==========================================
+            
+            
+            
             panelDetails = new Panel
             {
                 Location = new Point(25, 100),
@@ -248,16 +248,16 @@ namespace RapidoSurWinForms
                 var envio = _db.GetEnvioByPedido(idPedido);
                 if (envio != null)
                 {
-                    // STATE: ASSIGNED / IN ROUTE / DELIVERED
+                    
                     panelDetails.Visible = true;
 
-                    // Set Ficha Labels
+                    
                     lblEstadoBadge.Text = envio.EstadoEnvio.ToUpper();
-                    if (envio.EstadoEnvio == "Asignado") { lblEstadoBadge.BackColor = Color.FromArgb(59, 130, 246); } // Blue
-                    else if (envio.EstadoEnvio == "En Ruta") { lblEstadoBadge.BackColor = Color.FromArgb(99, 102, 241); } // Indigo
-                    else if (envio.EstadoEnvio == "Con Incidencia") { lblEstadoBadge.BackColor = Color.FromArgb(239, 68, 68); } // Red
-                    else if (envio.EstadoEnvio == "Reprogramado") { lblEstadoBadge.BackColor = Color.FromArgb(245, 158, 11); } // Orange
-                    else if (envio.EstadoEnvio == "Entregado") { lblEstadoBadge.BackColor = Color.FromArgb(16, 185, 129); } // Green
+                    if (envio.EstadoEnvio == "Asignado") { lblEstadoBadge.BackColor = Color.FromArgb(59, 130, 246); } 
+                    else if (envio.EstadoEnvio == "En Ruta") { lblEstadoBadge.BackColor = Color.FromArgb(99, 102, 241); } 
+                    else if (envio.EstadoEnvio == "Con Incidencia") { lblEstadoBadge.BackColor = Color.FromArgb(239, 68, 68); } 
+                    else if (envio.EstadoEnvio == "Reprogramado") { lblEstadoBadge.BackColor = Color.FromArgb(245, 158, 11); } 
+                    else if (envio.EstadoEnvio == "Entregado") { lblEstadoBadge.BackColor = Color.FromArgb(16, 185, 129); } 
 
                     lblClienteVal.Text = $"Cliente: {envio.ClienteNombre}";
                     lblDireccionVal.Text = $"Destino: {envio.DireccionEntrega}";
@@ -266,7 +266,7 @@ namespace RapidoSurWinForms
                     lblConductorVal.Text = $"Chofer: {envio.ConductorNombre}";
                     lblFechaEstimadaVal.Text = $"Fecha Estimada: {envio.FechaEntregaEstimada?.ToString("dd/MM/yyyy")}";
 
-                    // Load Timeline
+                    
                     lbTimeline.Items.Clear();
                     var historial = _db.GetHistorialEnvio(envio.IdEnvio);
                     foreach (var h in historial)
@@ -283,7 +283,7 @@ namespace RapidoSurWinForms
                 }
                 else
                 {
-                    // Check if order exists but pending assignment
+                    
                     var pedido = _db.GetPedido(idPedido);
                     if (pedido != null)
                     {

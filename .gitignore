@@ -1,9 +1,7 @@
-# User-specific files
 *.user
 *.userossc
 *.sln.docstates
 
-# Build results
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -17,21 +15,16 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
-# Visual Studio 2015/2017/2019/2022 cache/options directory
 .vs/
 
-# JetBrains Rider
 .idea/
 
-# .NET Core
 project.lock.json
 project.fragment.lock.json
 artifacts/
 
-# Backup folders
 Backup*/
 
-# SQL Server files
 *.mdf
 *.ldf
 *.sdf

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -10,12 +10,12 @@ namespace RapidoSurWinForms
         private readonly Form _loginForm;
         private readonly DbService _db = new DbService();
 
-        // Layout panels
+        
         private Panel sidebarPanel;
         private Panel headerPanel;
         private Panel contentPanel;
         
-        // Sidebar controls
+        
         private Label logoLabel;
         private Button btnDashboard;
         private Button btnNewOrder;
@@ -28,7 +28,7 @@ namespace RapidoSurWinForms
         private Label lblUserName;
         private Label lblUserRole;
 
-        // Dashboard stats panels
+        
         private Panel cardPedidos;
         private Label lblPedidosCount;
         private Label lblPedidosTitle;
@@ -45,7 +45,7 @@ namespace RapidoSurWinForms
         private Label lblAlertasCount;
         private Label lblAlertasTitle;
 
-        // Data grid controls
+        
         private Label gridTitle;
         private DataGridView dgvRecentOrders;
 
@@ -60,17 +60,17 @@ namespace RapidoSurWinForms
             this.Text = "Rápido Sur S.R.L. - Sistema de Gestión Logística (Administrador / Operador)";
             this.Size = new Size(1100, 680);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.BackColor = Color.FromArgb(11, 15, 12); // Deep Dark forest background
+            this.BackColor = Color.FromArgb(11, 15, 12); 
             this.FormClosing += (s, e) => Application.Exit();
 
-            // ==========================================
-            // SIDEBAR PANEL
-            // ==========================================
+            
+            
+            
             sidebarPanel = new Panel
             {
                 Dock = DockStyle.Left,
                 Width = 240,
-                BackColor = Color.FromArgb(15, 22, 17) // Moss sidebar background
+                BackColor = Color.FromArgb(15, 22, 17) 
             };
             this.Controls.Add(sidebarPanel);
 
@@ -78,21 +78,21 @@ namespace RapidoSurWinForms
             {
                 Text = "⚡ Rápido Sur",
                 Font = new Font("Segoe UI", 16, FontStyle.Bold),
-                ForeColor = Color.FromArgb(57, 211, 83), // Vibrant Apple Green
+                ForeColor = Color.FromArgb(57, 211, 83), 
                 Location = new Point(0, 0),
                 Size = new Size(240, 70),
                 TextAlign = ContentAlignment.MiddleCenter
             };
             sidebarPanel.Controls.Add(logoLabel);
 
-            // Navigation buttons in sidebar
+            
             btnDashboard = CreateSidebarButton("Panel Principal", 80, (s, e) => RefreshDashboardData());
             btnNewOrder = CreateSidebarButton("Registrar Pedido", 130, btnNewOrder_Click);
             btnAssignVehicle = CreateSidebarButton("Despachar Flota", 180, btnAssignVehicle_Click);
             btnTrackingSim = CreateSidebarButton("Simulador Cliente", 230, btnTrackingSim_Click);
             
             btnReports = CreateSidebarButton("Reportes ADS", 280, btnReports_Click);
-            // Restricted security: only visible if Administrator (CU-08)
+            
             if (Session.UserRole != "Administrador")
             {
                 btnReports.Visible = false;
@@ -103,12 +103,12 @@ namespace RapidoSurWinForms
             btnLogout.ForeColor = Color.White;
             btnLogout.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 
-            // User Info Badge at the bottom of sidebar
+            
             userPanel = new Panel
             {
                 Location = new Point(15, 550),
                 Size = new Size(210, 70),
-                BackColor = Color.FromArgb(25, 35, 28), // Dark Moss Green-Gray
+                BackColor = Color.FromArgb(25, 35, 28), 
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Left
             };
             sidebarPanel.Controls.Add(userPanel);
@@ -117,8 +117,8 @@ namespace RapidoSurWinForms
             {
                 Text = Session.UserName.Substring(0, 1).ToUpper(),
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                ForeColor = Color.Black, // Dark text on bright avatar
-                BackColor = Color.FromArgb(57, 211, 83), // Apple Green Avatar
+                ForeColor = Color.Black, 
+                BackColor = Color.FromArgb(57, 211, 83), 
                 Location = new Point(10, 12),
                 Size = new Size(45, 45),
                 TextAlign = ContentAlignment.MiddleCenter
@@ -139,20 +139,20 @@ namespace RapidoSurWinForms
             {
                 Text = Session.UserRole,
                 Font = new Font("Segoe UI", 8, FontStyle.Italic),
-                ForeColor = Color.FromArgb(150, 170, 155), // Light Moss Gray
+                ForeColor = Color.FromArgb(150, 170, 155), 
                 Location = new Point(60, 35),
                 Size = new Size(140, 20)
             };
             userPanel.Controls.Add(lblUserRole);
 
-            // ==========================================
-            // HEADER PANEL
-            // ==========================================
+            
+            
+            
             headerPanel = new Panel
             {
                 Dock = DockStyle.Top,
                 Height = 70,
-                BackColor = Color.FromArgb(20, 28, 22) // Moss Header
+                BackColor = Color.FromArgb(20, 28, 22) 
             };
             this.Controls.Add(headerPanel);
 
@@ -167,18 +167,18 @@ namespace RapidoSurWinForms
             };
             headerPanel.Controls.Add(titleLabel);
 
-            // ==========================================
-            // CONTENT PANEL
-            // ==========================================
+            
+            
+            
             contentPanel = new Panel
             {
                 Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(11, 15, 12), // Deep Dark forest background
+                BackColor = Color.FromArgb(11, 15, 12), 
                 Padding = new Padding(20)
             };
             this.Controls.Add(contentPanel);
 
-            // Stats Table Layout Panel (Dynamic stretching)
+            
             TableLayoutPanel statsTable = new TableLayoutPanel
             {
                 Location = new Point(20, 15),
@@ -194,17 +194,17 @@ namespace RapidoSurWinForms
             statsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25f));
             contentPanel.Controls.Add(statsTable);
 
-            cardPedidos = CreateStatCard("PEDIDOS RECIBIDOS", "0", Color.FromArgb(57, 211, 83)); // Apple Green
-            cardVehiculos = CreateStatCard("CAMIONES EN RUTA", "0", Color.FromArgb(162, 230, 75)); // Lime Green
-            cardEntregas = CreateStatCard("ENTREGAS HECHAS", "0", Color.FromArgb(210, 220, 50)); // Yellow-Green
-            cardAlertas = CreateStatCard("INCIDENCIAS ACT.", "0", Color.FromArgb(239, 68, 68)); // Warning Red
+            cardPedidos = CreateStatCard("PEDIDOS RECIBIDOS", "0", Color.FromArgb(57, 211, 83)); 
+            cardVehiculos = CreateStatCard("CAMIONES EN RUTA", "0", Color.FromArgb(162, 230, 75)); 
+            cardEntregas = CreateStatCard("ENTREGAS HECHAS", "0", Color.FromArgb(210, 220, 50)); 
+            cardAlertas = CreateStatCard("INCIDENCIAS ACT.", "0", Color.FromArgb(239, 68, 68)); 
 
             statsTable.Controls.Add(cardPedidos, 0, 0);
             statsTable.Controls.Add(cardVehiculos, 1, 0);
             statsTable.Controls.Add(cardEntregas, 2, 0);
             statsTable.Controls.Add(cardAlertas, 3, 0);
 
-            // DataGrid recent orders title
+            
             gridTitle = new Label
             {
                 Text = "ÚLTIMOS PEDIDOS REGISTRADOS EN EL SISTEMA",
@@ -221,7 +221,7 @@ namespace RapidoSurWinForms
                 Location = new Point(20, 165),
                 Size = new Size(820, 440),
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                BackgroundColor = Color.FromArgb(20, 28, 22), // Moss Dark grid
+                BackgroundColor = Color.FromArgb(20, 28, 22), 
                 ForeColor = Color.White,
                 GridColor = Color.FromArgb(30, 42, 33),
                 BorderStyle = BorderStyle.None,
@@ -239,11 +239,11 @@ namespace RapidoSurWinForms
             dgvRecentOrders.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9.5f, FontStyle.Bold);
             dgvRecentOrders.DefaultCellStyle.BackColor = Color.FromArgb(20, 28, 22);
             dgvRecentOrders.DefaultCellStyle.ForeColor = Color.White;
-            dgvRecentOrders.DefaultCellStyle.SelectionBackColor = Color.FromArgb(57, 211, 83); // Bright Apple Green selection
-            dgvRecentOrders.DefaultCellStyle.SelectionForeColor = Color.Black; // High contrast dark text on bright green
+            dgvRecentOrders.DefaultCellStyle.SelectionBackColor = Color.FromArgb(57, 211, 83); 
+            dgvRecentOrders.DefaultCellStyle.SelectionForeColor = Color.Black; 
             contentPanel.Controls.Add(dgvRecentOrders);
 
-            // Set up datagrid columns
+            
             dgvRecentOrders.Columns.Add("IdPedido", "ID Pedido");
             dgvRecentOrders.Columns.Add("ClienteNombre", "Cliente");
             dgvRecentOrders.Columns.Add("FechaSolicitud", "Fecha Solicitud");
@@ -252,19 +252,19 @@ namespace RapidoSurWinForms
             dgvRecentOrders.Columns.Add("Prioridad", "Prioridad");
             dgvRecentOrders.Columns.Add("Estado", "Estado");
 
-            // Format specific grid columns
+            
             dgvRecentOrders.Columns["IdPedido"].Width = 70;
             dgvRecentOrders.Columns["PesoKg"].Width = 80;
             dgvRecentOrders.Columns["Prioridad"].Width = 80;
             dgvRecentOrders.Columns["Estado"].Width = 90;
 
-            // Load values
+            
             RefreshDashboardData();
 
-            // Establish correct Z-order for docking layout:
-            // 1. headerPanel gets full width (docked Top)
-            // 2. sidebarPanel starts below header (docked Left)
-            // 3. contentPanel fills remaining space (docked Fill)
+            
+            
+            
+            
             sidebarPanel.SendToBack();
             headerPanel.SendToBack();
             contentPanel.BringToFront();
@@ -279,7 +279,7 @@ namespace RapidoSurWinForms
                 Location = new Point(15, top),
                 Size = new Size(210, 40),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(25, 35, 28), // Moss active button
+                BackColor = Color.FromArgb(25, 35, 28), 
                 ForeColor = Color.FromArgb(200, 220, 205),
                 TextAlign = ContentAlignment.MiddleLeft,
                 Cursor = Cursors.Hand
@@ -295,11 +295,11 @@ namespace RapidoSurWinForms
             Panel card = new Panel
             {
                 Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(20, 28, 22), // Moss stat card background
+                BackColor = Color.FromArgb(20, 28, 22), 
                 Padding = new Padding(0)
             };
 
-            // Left colored decorative bar
+            
             Panel decBar = new Panel
             {
                 Dock = DockStyle.Left,
@@ -331,7 +331,7 @@ namespace RapidoSurWinForms
             };
             card.Controls.Add(countLbl);
 
-            // Store references in lists or search by tag if we need to modify them later
+            
             if (title.Contains("PEDIDOS")) lblPedidosCount = countLbl;
             else if (title.Contains("CAMIONES")) lblVehiculosCount = countLbl;
             else if (title.Contains("ENTREGAS")) lblEntregasCount = countLbl;
@@ -353,7 +353,7 @@ namespace RapidoSurWinForms
                 lblEntregasCount.Text = pedidos.FindAll(p => p.Estado == "Entregado").Count.ToString();
                 lblAlertasCount.Text = envios.FindAll(e => e.EstadoEnvio == "Con Incidencia" || e.EstadoEnvio == "Reprogramado").Count.ToString();
 
-                // Populate grid
+                
                 dgvRecentOrders.Rows.Clear();
                 int limit = Math.Min(pedidos.Count, 15);
                 for (int i = 0; i < limit; i++)
@@ -369,12 +369,12 @@ namespace RapidoSurWinForms
                         p.Estado
                     );
 
-                    // Style the state cells
+                    
                     var row = dgvRecentOrders.Rows[i];
                     var stateCell = row.Cells["Estado"];
-                    if (p.Estado == "Pendiente") stateCell.Style.ForeColor = Color.FromArgb(245, 158, 11); // Orange
-                    else if (p.Estado == "En Ruta" || p.Estado == "Asignado") stateCell.Style.ForeColor = Color.FromArgb(57, 211, 83); // Bright Apple Green
-                    else if (p.Estado == "Entregado") stateCell.Style.ForeColor = Color.FromArgb(16, 185, 129); // Green
+                    if (p.Estado == "Pendiente") stateCell.Style.ForeColor = Color.FromArgb(245, 158, 11); 
+                    else if (p.Estado == "En Ruta" || p.Estado == "Asignado") stateCell.Style.ForeColor = Color.FromArgb(57, 211, 83); 
+                    else if (p.Estado == "Entregado") stateCell.Style.ForeColor = Color.FromArgb(16, 185, 129); 
                 }
             }
             catch (Exception ex)

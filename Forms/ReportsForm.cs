@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace RapidoSurWinForms
     {
         private readonly DbService _db = new DbService();
 
-        // UI Controls
+        
         private Label lblReportType;
         private ComboBox cbReportType;
         
@@ -36,9 +36,9 @@ namespace RapidoSurWinForms
             this.MaximizeBox = false;
             this.BackColor = Color.FromArgb(10, 15, 30);
 
-            // ==========================================
-            // REPORT PARAMETERS PANEL
-            // ==========================================
+            
+            
+            
             Panel paramsPanel = new Panel
             {
                 Location = new Point(25, 20),
@@ -65,7 +65,7 @@ namespace RapidoSurWinForms
                 Font = new Font("Segoe UI", 9.5f)
             };
             cbReportType.Items.AddRange(new string[] { "Entregas", "Incidencias", "Flota", "Pedidos" });
-            cbReportType.SelectedIndex = 0; // Entregas
+            cbReportType.SelectedIndex = 0; 
 
             lblFechaInicio = new Label
             {
@@ -119,9 +119,9 @@ namespace RapidoSurWinForms
 
             paramsPanel.Controls.AddRange(new Control[] { lblReportType, cbReportType, lblFechaInicio, dtpInicio, lblFechaFin, dtpFin, btnGenerar });
 
-            // ==========================================
-            // RESULTS GRID
-            // ==========================================
+            
+            
+            
             lblResults = new Label
             {
                 Text = "RESULTADOS DEL REPORTE GENERADO:",
@@ -158,7 +158,7 @@ namespace RapidoSurWinForms
             dgvReportResults.DefaultCellStyle.SelectionForeColor = Color.White;
             this.Controls.Add(dgvReportResults);
 
-            // Generate initial report
+            
             GenerateReport();
         }
 
@@ -184,7 +184,7 @@ namespace RapidoSurWinForms
                 var resultados = _db.RunReport(tipo, inicio, fin);
                 lblResults.Text = $"RESULTADOS DEL REPORTE GENERADO ({tipo.ToUpper()}): {resultados.Count} REGISTROS ENCONTRADOS";
 
-                // Clear previous columns and rows
+                
                 dgvReportResults.Columns.Clear();
                 dgvReportResults.Rows.Clear();
 
@@ -194,22 +194,22 @@ namespace RapidoSurWinForms
                     return;
                 }
 
-                // DYNAMIC COLUMN GENERATION
-                // Use the keys of the first record to dynamically generate columns
+                
+                
                 var firstRow = resultados[0];
                 foreach (string key in firstRow.Keys)
                 {
                     dgvReportResults.Columns.Add(key, key);
                 }
 
-                // Add rows dynamically
+                
                 foreach (var rowDict in resultados)
                 {
                     var rowValues = new List<object>();
                     foreach (string key in rowDict.Keys)
                     {
                         object val = rowDict[key];
-                        // Format DateTime for a cleaner view in grids
+                        
                         if (val is DateTime dt)
                         {
                             rowValues.Add(dt.ToString("dd/MM/yyyy hh:mm tt"));

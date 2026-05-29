@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -10,12 +10,12 @@ namespace RapidoSurWinForms
         private readonly MainForm _parentForm;
         private readonly DbService _db = new DbService();
 
-        // Data lists
+        
         private List<Pedido> pendingOrders = new();
         private List<Vehiculo> availableVehicles = new();
         private List<Conductor> availableDrivers = new();
 
-        // UI Controls
+        
         private Label lblPedidos;
         private ListBox lbPedidos;
 
@@ -47,9 +47,9 @@ namespace RapidoSurWinForms
             this.MaximizeBox = false;
             this.BackColor = Color.FromArgb(10, 15, 30);
 
-            // ==========================================
-            // LEFT COLUMN: PENDING ORDERS LIST
-            // ==========================================
+            
+            
+            
             lblPedidos = new Label
             {
                 Text = "PEDIDOS PENDIENTES DE DESPACHO:",
@@ -72,9 +72,9 @@ namespace RapidoSurWinForms
             lbPedidos.SelectedIndexChanged += lbPedidos_SelectedIndexChanged;
             this.Controls.Add(lbPedidos);
 
-            // ==========================================
-            // RIGHT COLUMN: ASSIGNMENT BOX
-            // ==========================================
+            
+            
+            
             gbAsignacion = new GroupBox
             {
                 Text = "Asignación de Recursos Logísticos",
@@ -134,9 +134,9 @@ namespace RapidoSurWinForms
             gbAsignacion.Controls.Add(lblRuta);
             gbAsignacion.Controls.Add(txtRuta);
 
-            // ==========================================
-            // ACTION BUTTONS
-            // ==========================================
+            
+            
+            
             btnDespachar = new Button
             {
                 Text = "GENERAR DESPACHO (COMMIT)",
@@ -167,7 +167,7 @@ namespace RapidoSurWinForms
             btnCancelar.Click += (s, e) => this.Close();
             this.Controls.Add(btnCancelar);
 
-            // Load data from database
+            
             RefreshData();
         }
 
@@ -179,14 +179,14 @@ namespace RapidoSurWinForms
                 availableVehicles = _db.GetVehiculos("Disponible");
                 availableDrivers = _db.GetConductores(true);
 
-                // Populate ListBox
+                
                 lbPedidos.Items.Clear();
                 foreach (var p in pendingOrders)
                 {
                     lbPedidos.Items.Add($"Pedido #{p.IdPedido} - {p.ClienteNombre} ({p.PesoKg}kg)");
                 }
 
-                // Populate Comboboxes
+                
                 cbVehiculos.DisplayMember = "DescripcionCompleta";
                 cbVehiculos.ValueMember = "IdVehiculo";
                 cbVehiculos.DataSource = availableVehicles;
@@ -232,9 +232,9 @@ namespace RapidoSurWinForms
 
             if (pedido == null || vehiculo == null || conductor == null) return;
 
-            // ==========================================
-            // REGLA DE NEGOCIO: CONTROL DE PESO (CU-04)
-            // ==========================================
+            
+            
+            
             if (vehiculo.CapacidadCargaKg < pedido.PesoKg)
             {
                 string msg = $"¡ALERTA DE SOBRECARGA!\n\nEl vehículo seleccionado ({vehiculo.Placa}) tiene una capacidad máxima de {vehiculo.CapacidadCargaKg} kg, el cual es inferior al peso del pedido ({pedido.PesoKg} kg).\n\nAsigne una unidad de mayor capacidad.";
@@ -242,9 +242,9 @@ namespace RapidoSurWinForms
                 return;
             }
 
-            // ==========================================
-            // GENERAR ENVÍO (TRANSACTION - ACID)
-            // ==========================================
+            
+            
+            
             var nuevoEnvio = new Envio
             {
                 IdPedido = pedido.IdPedido,
@@ -264,7 +264,7 @@ namespace RapidoSurWinForms
                 string successMsg = $"¡Órden de Despacho ejecutada con éxito!\n\nSe ha guardado en la base de datos (Commit Transaccional):\n1. Registro de Envío creado.\n2. Pedido #{pedido.IdPedido} marcado como Asignado.\n3. Vehículo {vehiculo.Placa} en ruta.\n4. Conductor ocupado.";
                 MessageBox.Show(successMsg, "Despacho Confirmado (ACID)", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Refresh dashboard and close
+                
                 _parentForm.RefreshDashboardData();
                 this.Close();
             }

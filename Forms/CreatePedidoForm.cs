@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace RapidoSurWinForms
         private readonly MainForm _parentForm;
         private readonly DbService _db = new DbService();
 
-        // UI Controls
+        
         private RadioButton rbClienteExistente;
         private RadioButton rbClienteNuevo;
         private Panel panelClienteExistente;
@@ -29,7 +29,7 @@ namespace RapidoSurWinForms
         private Label lblDireccion;
         private TextBox txtDireccion;
 
-        // Pedido Inputs
+        
         private GroupBox gbPedido;
         private Label lblDireccionEntrega;
         private TextBox txtDireccionEntrega;
@@ -60,7 +60,7 @@ namespace RapidoSurWinForms
             this.MaximizeBox = false;
             this.BackColor = Color.FromArgb(10, 15, 30);
 
-            // Selectors
+            
             rbClienteExistente = new RadioButton
             {
                 Text = "Cliente Registrado",
@@ -83,9 +83,9 @@ namespace RapidoSurWinForms
             };
             this.Controls.Add(rbClienteNuevo);
 
-            // ==========================================
-            // PANEL CLIENTE EXISTENTE
-            // ==========================================
+            
+            
+            
             panelClienteExistente = new Panel
             {
                 Location = new Point(25, 55),
@@ -114,9 +114,9 @@ namespace RapidoSurWinForms
             panelClienteExistente.Controls.Add(lblSelectCliente);
             panelClienteExistente.Controls.Add(cbClientes);
 
-            // ==========================================
-            // PANEL CLIENTE NUEVO
-            // ==========================================
+            
+            
+            
             panelClienteNuevo = new Panel
             {
                 Location = new Point(25, 55),
@@ -141,9 +141,9 @@ namespace RapidoSurWinForms
 
             panelClienteNuevo.Controls.AddRange(new Control[] { lblNombre, txtNombre, lblApellido, txtApellido, lblTelefono, txtTelefono, lblCorreo, txtCorreo, lblDireccion, txtDireccion });
 
-            // ==========================================
-            // GROUPBOX PEDIDO
-            // ==========================================
+            
+            
+            
             gbPedido = new GroupBox
             {
                 Text = "Detalles de la Carga y Entrega",
@@ -183,16 +183,16 @@ namespace RapidoSurWinForms
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             cbPrioridad.Items.AddRange(new string[] { "Baja", "Media", "Alta" });
-            cbPrioridad.SelectedIndex = 1; // Media
+            cbPrioridad.SelectedIndex = 1; 
 
             lblObservaciones = new Label { Text = "Observaciones / Indicaciones Especiales:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 195), Size = new Size(400, 18) };
             txtObservaciones = new TextBox { Location = new Point(15, 215), Size = new Size(400, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
 
             gbPedido.Controls.AddRange(new Control[] { lblDireccionEntrega, txtDireccionEntrega, lblTipoCarga, txtTipoCarga, lblPesoKg, numPesoKg, lblPrioridad, cbPrioridad, lblObservaciones, txtObservaciones });
 
-            // ==========================================
-            // ACTION BUTTONS
-            // ==========================================
+            
+            
+            
             btnGuardar = new Button
             {
                 Text = "GUARDAR PEDIDO",
@@ -223,7 +223,7 @@ namespace RapidoSurWinForms
             btnCancelar.Click += (s, e) => this.Close();
             this.Controls.Add(btnCancelar);
 
-            // Load clients
+            
             LoadClients();
             ToggleClientType();
         }
@@ -250,7 +250,7 @@ namespace RapidoSurWinForms
                 panelClienteExistente.Visible = true;
                 panelClienteNuevo.Visible = false;
                 gbPedido.Location = new Point(25, 140);
-                gbPedido.Height = 380; // Make taller to fill space or keep it neat
+                gbPedido.Height = 380; 
             }
             else
             {
@@ -274,7 +274,7 @@ namespace RapidoSurWinForms
                 }
                 clienteIdActual = (int)cbClientes.SelectedValue;
             }
-            else // Nuevo cliente
+            else 
             {
                 string nombre = txtNombre.Text.Trim();
                 string apellido = txtApellido.Text.Trim();
@@ -305,7 +305,7 @@ namespace RapidoSurWinForms
                 }
             }
 
-            // Validar Pedido
+            
             string direccion = txtDireccionEntrega.Text.Trim();
             decimal peso = numPesoKg.Value;
 
@@ -330,7 +330,7 @@ namespace RapidoSurWinForms
                 _db.AddPedido(nuevoPedido);
                 MessageBox.Show("¡Pedido registrado con éxito! Su estado actual es: PENDIENTE.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 
-                // Refresh Parent Dashboard grid
+                
                 _parentForm.RefreshDashboardData();
                 this.Close();
             }

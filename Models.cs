@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace RapidoSurWinForms
 {
@@ -19,7 +19,7 @@ namespace RapidoSurWinForms
     {
         public int IdPedido { get; set; }
         public int IdCliente { get; set; }
-        public string ClienteNombre { get; set; } = string.Empty; // Campo auxiliar
+        public string ClienteNombre { get; set; } = string.Empty; 
         public DateTime FechaSolicitud { get; set; }
         public string DireccionEntrega { get; set; } = string.Empty;
         public string? TipoCarga { get; set; }
@@ -83,7 +83,7 @@ namespace RapidoSurWinForms
         public string? RutaDescripcion { get; set; }
         public string EstadoEnvio { get; set; } = "Asignado";
 
-        // Campos auxiliares para la interfaz
+        
         public string ClienteNombre { get; set; } = string.Empty;
         public string DireccionEntrega { get; set; } = string.Empty;
         public string TipoCarga { get; set; } = string.Empty;
