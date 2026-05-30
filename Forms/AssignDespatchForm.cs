@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -45,16 +45,13 @@ namespace RapidoSurWinForms
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.BackColor = Color.FromArgb(10, 15, 30);
+            this.BackColor = Color.FromArgb(240, 244, 248);
 
-            
-            
-            
             lblPedidos = new Label
             {
                 Text = "PEDIDOS PENDIENTES DE DESPACHO:",
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Location = new Point(25, 20),
                 Size = new Size(350, 20)
             };
@@ -64,79 +61,74 @@ namespace RapidoSurWinForms
             {
                 Location = new Point(25, 45),
                 Size = new Size(360, 310),
-                BackColor = Color.FromArgb(20, 30, 55),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 Font = new Font("Segoe UI", 9),
                 BorderStyle = BorderStyle.None
             };
             lbPedidos.SelectedIndexChanged += lbPedidos_SelectedIndexChanged;
             this.Controls.Add(lbPedidos);
 
-            
-            
-            
             gbAsignacion = new GroupBox
             {
                 Text = "Asignación de Recursos Logísticos",
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                ForeColor = Color.FromArgb(99, 102, 241),
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Location = new Point(410, 35),
-                Size = new Size(370, 320)
+                Size = new Size(370, 320),
+                BackColor = Color.White
             };
             this.Controls.Add(gbAsignacion);
 
-            lblVehiculo = new Label { Text = "Vehículo Disponible (Placa - Capacidad):", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(20, 30), Size = new Size(330, 18) };
+            lblVehiculo = new Label { Text = "Vehículo Disponible (Placa - Capacidad):", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(20, 30), Size = new Size(330, 18) };
             cbVehiculos = new ComboBox
             {
                 Location = new Point(20, 50),
                 Size = new Size(330, 25),
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             gbAsignacion.Controls.Add(lblVehiculo);
             gbAsignacion.Controls.Add(cbVehiculos);
 
-            lblConductor = new Label { Text = "Conductor Disponible (Licencia):", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(20, 95), Size = new Size(330, 18) };
+            lblConductor = new Label { Text = "Conductor Disponible (Licencia):", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(20, 95), Size = new Size(330, 18) };
             cbConductores = new ComboBox
             {
                 Location = new Point(20, 115),
                 Size = new Size(330, 25),
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             gbAsignacion.Controls.Add(lblConductor);
             gbAsignacion.Controls.Add(cbConductores);
 
-            lblFechaEstimada = new Label { Text = "Fecha Estimada de Entrega:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(20, 160), Size = new Size(330, 18) };
+            lblFechaEstimada = new Label { Text = "Fecha Estimada de Entrega:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(20, 160), Size = new Size(330, 18) };
             dtpFechaEstimada = new DateTimePicker
             {
                 Location = new Point(20, 180),
                 Size = new Size(330, 25),
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 Format = DateTimePickerFormat.Short,
                 Value = DateTime.Now.AddDays(1)
             };
             gbAsignacion.Controls.Add(lblFechaEstimada);
             gbAsignacion.Controls.Add(dtpFechaEstimada);
 
-            lblRuta = new Label { Text = "Indicaciones de Ruta / Trayecto:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(20, 225), Size = new Size(330, 18) };
+            lblRuta = new Label { Text = "Indicaciones de Ruta / Trayecto:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(20, 225), Size = new Size(330, 18) };
             txtRuta = new TextBox
             {
                 Location = new Point(20, 245),
                 Size = new Size(330, 23),
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 BorderStyle = BorderStyle.FixedSingle
             };
             gbAsignacion.Controls.Add(lblRuta);
             gbAsignacion.Controls.Add(txtRuta);
 
-            
-            
-            
             btnDespachar = new Button
             {
                 Text = "GENERAR DESPACHO (COMMIT)",
@@ -144,7 +136,7 @@ namespace RapidoSurWinForms
                 Location = new Point(25, 380),
                 Size = new Size(360, 42),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(99, 102, 241),
+                BackColor = Color.FromArgb(41, 128, 185),
                 ForeColor = Color.White,
                 Cursor = Cursors.Hand
             };
@@ -159,15 +151,14 @@ namespace RapidoSurWinForms
                 Location = new Point(410, 380),
                 Size = new Size(370, 42),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(30, 45, 75),
-                ForeColor = Color.FromArgb(180, 190, 210),
+                BackColor = Color.FromArgb(220, 224, 224),
+                ForeColor = Color.FromArgb(64, 64, 64),
                 Cursor = Cursors.Hand
             };
             btnCancelar.FlatAppearance.BorderSize = 0;
             btnCancelar.Click += (s, e) => this.Close();
             this.Controls.Add(btnCancelar);
 
-            
             RefreshData();
         }
 

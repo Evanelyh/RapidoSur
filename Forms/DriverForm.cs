@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -52,17 +52,14 @@ namespace RapidoSurWinForms
             this.Text = "Terminal Logística del Conductor - Rápido Sur S.R.L.";
             this.Size = new Size(950, 600);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.BackColor = Color.FromArgb(11, 15, 12); 
+            this.BackColor = Color.FromArgb(240, 244, 248); 
             this.FormClosing += (s, e) => Application.Exit();
 
-            
-            
-            
             headerPanel = new Panel
             {
                 Dock = DockStyle.Top,
                 Height = 70,
-                BackColor = Color.FromArgb(20, 28, 22) 
+                BackColor = Color.White 
             };
             this.Controls.Add(headerPanel);
 
@@ -70,7 +67,7 @@ namespace RapidoSurWinForms
             {
                 Text = $"CHOFER: {Session.UserName}",
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                ForeColor = Color.FromArgb(57, 211, 83), 
+                ForeColor = Color.FromArgb(31, 58, 86), 
                 Location = new Point(20, 10),
                 Size = new Size(500, 25),
                 TextAlign = ContentAlignment.MiddleLeft
@@ -81,12 +78,32 @@ namespace RapidoSurWinForms
             {
                 Text = $"Licencia: {Session.UserLicence} | Terminal de Campo Móvil",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Regular),
-                ForeColor = Color.FromArgb(150, 170, 155), 
+                ForeColor = Color.FromArgb(100, 110, 120), 
                 Location = new Point(20, 38),
                 Size = new Size(500, 20),
                 TextAlign = ContentAlignment.MiddleLeft
             };
             headerPanel.Controls.Add(lblDriverSub);
+
+            PictureBox pbHeaderLogo = new PictureBox
+            {
+                Size = new Size(55, 55),
+                Location = new Point(700, 7),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Transparent,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
+            };
+
+            string logoPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "logo.png");
+            if (!System.IO.File.Exists(logoPath))
+            {
+                logoPath = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Assets", "logo.png");
+            }
+            if (System.IO.File.Exists(logoPath))
+            {
+                pbHeaderLogo.Image = Image.FromFile(logoPath);
+            }
+            headerPanel.Controls.Add(pbHeaderLogo);
 
             btnLogout = new Button
             {
@@ -95,7 +112,7 @@ namespace RapidoSurWinForms
                 Location = new Point(780, 15),
                 Size = new Size(130, 38),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(239, 68, 68),
+                BackColor = Color.FromArgb(217, 83, 79),
                 ForeColor = Color.White,
                 Cursor = Cursors.Hand,
                 Anchor = AnchorStyles.Top | AnchorStyles.Right
@@ -104,9 +121,6 @@ namespace RapidoSurWinForms
             btnLogout.Click += btnLogout_Click;
             headerPanel.Controls.Add(btnLogout);
 
-            
-            
-            
             TableLayoutPanel mainLayout = new TableLayoutPanel
             {
                 Location = new Point(20, 85),
@@ -120,9 +134,6 @@ namespace RapidoSurWinForms
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 410f));   
             this.Controls.Add(mainLayout);
 
-            
-            
-            
             Panel gridContainer = new Panel
             {
                 Dock = DockStyle.Fill,
@@ -135,7 +146,7 @@ namespace RapidoSurWinForms
             {
                 Text = "MIS DESPACHOS Y ENVÍOS ACTIVOS EN RUTA:",
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Dock = DockStyle.Top,
                 Height = 25
             };
@@ -144,9 +155,9 @@ namespace RapidoSurWinForms
             dgvActiveShipments = new DataGridView
             {
                 Dock = DockStyle.Fill,
-                BackgroundColor = Color.FromArgb(20, 28, 22), 
-                ForeColor = Color.White,
-                GridColor = Color.FromArgb(30, 42, 33),
+                BackgroundColor = Color.White, 
+                ForeColor = Color.Black,
+                GridColor = Color.FromArgb(220, 224, 224),
                 BorderStyle = BorderStyle.None,
                 ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single,
                 EnableHeadersVisualStyles = false,
@@ -157,20 +168,18 @@ namespace RapidoSurWinForms
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             };
-            dgvActiveShipments.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 22, 17);
-            dgvActiveShipments.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvActiveShipments.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(235, 240, 245);
+            dgvActiveShipments.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(31, 58, 86);
             dgvActiveShipments.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-            dgvActiveShipments.DefaultCellStyle.BackColor = Color.FromArgb(20, 28, 22);
-            dgvActiveShipments.DefaultCellStyle.ForeColor = Color.White;
-            dgvActiveShipments.DefaultCellStyle.SelectionBackColor = Color.FromArgb(57, 211, 83); 
-            dgvActiveShipments.DefaultCellStyle.SelectionForeColor = Color.Black; 
+            dgvActiveShipments.DefaultCellStyle.BackColor = Color.White;
+            dgvActiveShipments.DefaultCellStyle.ForeColor = Color.Black;
+            dgvActiveShipments.DefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 128, 185); 
+            dgvActiveShipments.DefaultCellStyle.SelectionForeColor = Color.White; 
             dgvActiveShipments.SelectionChanged += dgvActiveShipments_SelectionChanged;
             gridContainer.Controls.Add(dgvActiveShipments);
 
-            
             dgvActiveShipments.BringToFront();
 
-            
             dgvActiveShipments.Columns.Add("IdEnvio", "ID Envío");
             dgvActiveShipments.Columns.Add("Cliente", "Cliente");
             dgvActiveShipments.Columns.Add("Direccion", "Dirección");
@@ -180,9 +189,6 @@ namespace RapidoSurWinForms
             dgvActiveShipments.Columns["Peso"].Width = 70;
             dgvActiveShipments.Columns["Estado"].Width = 80;
 
-            
-            
-            
             Panel actionsContainer = new Panel
             {
                 Dock = DockStyle.Fill,
@@ -191,76 +197,68 @@ namespace RapidoSurWinForms
             };
             mainLayout.Controls.Add(actionsContainer, 1, 0);
 
-            
             gbActions = new GroupBox 
             { 
                 Text = "1. Actualizar Estado de Ruta", 
-                ForeColor = Color.FromArgb(57, 211, 83), 
+                ForeColor = Color.FromArgb(31, 58, 86), 
                 Font = new Font("Segoe UI", 9, FontStyle.Bold), 
                 Location = new Point(15, 0), 
-                Size = new Size(380, 90) 
+                Size = new Size(380, 90),
+                BackColor = Color.White
             };
             actionsContainer.Controls.Add(gbActions);
 
-            lblEstado = new Label { Text = "Nuevo Estado:", ForeColor = Color.White, Location = new Point(15, 20), Size = new Size(100, 20) };
-            cbEstados = new ComboBox { Location = new Point(15, 45), Size = new Size(180, 25), DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(15, 22, 17), ForeColor = Color.White };
+            lblEstado = new Label { Text = "Nuevo Estado:", ForeColor = Color.FromArgb(64, 64, 64), Location = new Point(15, 20), Size = new Size(100, 20) };
+            cbEstados = new ComboBox { Location = new Point(15, 45), Size = new Size(180, 25), DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.White, ForeColor = Color.Black };
             cbEstados.Items.AddRange(new string[] { "En Ruta", "Entregado" });
             cbEstados.SelectedIndex = 0;
-            btnUpdateStatus = new Button { Text = "ACTUALIZAR", Font = new Font("Segoe UI", 9, FontStyle.Bold), Location = new Point(215, 43), Size = new Size(140, 28), FlatStyle = FlatStyle.Flat, BackColor = Color.FromArgb(57, 211, 83), ForeColor = Color.Black, Cursor = Cursors.Hand };
+            btnUpdateStatus = new Button { Text = "ACTUALIZAR", Font = new Font("Segoe UI", 9, FontStyle.Bold), Location = new Point(215, 43), Size = new Size(140, 28), FlatStyle = FlatStyle.Flat, BackColor = Color.FromArgb(46, 204, 113), ForeColor = Color.White, Cursor = Cursors.Hand };
             btnUpdateStatus.FlatAppearance.BorderSize = 0;
             btnUpdateStatus.Click += btnUpdateStatus_Click;
             gbActions.Controls.AddRange(new Control[] { lblEstado, cbEstados, btnUpdateStatus });
 
-            
             gbIncidents = new GroupBox 
             { 
                 Text = "2. Reportar Incidencia / Retraso", 
-                ForeColor = Color.FromArgb(239, 68, 68), 
+                ForeColor = Color.FromArgb(231, 76, 60), 
                 Font = new Font("Segoe UI", 9, FontStyle.Bold), 
                 Location = new Point(15, 100), 
-                Size = new Size(380, 180) 
+                Size = new Size(380, 180),
+                BackColor = Color.White
             };
             actionsContainer.Controls.Add(gbIncidents);
 
-            lblIncidentType = new Label { Text = "Tipo de Novedad:", ForeColor = Color.White, Location = new Point(15, 20), Size = new Size(150, 18) };
-            cbIncidentTypes = new ComboBox { Location = new Point(15, 40), Size = new Size(340, 25), DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(15, 22, 17), ForeColor = Color.White };
+            lblIncidentType = new Label { Text = "Tipo de Novedad:", ForeColor = Color.FromArgb(64, 64, 64), Location = new Point(15, 20), Size = new Size(150, 18) };
+            cbIncidentTypes = new ComboBox { Location = new Point(15, 40), Size = new Size(340, 25), DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.White, ForeColor = Color.Black };
             cbIncidentTypes.Items.AddRange(new string[] { "Tráfico Pesado", "Falla Mecánica del Camión", "Fuerte Lluvia / Mal Clima", "Dirección No Encontrada", "Accidente en Carretera" });
             cbIncidentTypes.SelectedIndex = 0;
-            lblIncidentDesc = new Label { Text = "Detalles o Razón:", ForeColor = Color.White, Location = new Point(15, 75), Size = new Size(150, 18) };
-            txtIncidentDesc = new TextBox { Location = new Point(15, 95), Size = new Size(340, 23), BackColor = Color.FromArgb(15, 22, 17), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
-            btnReportIncident = new Button { Text = "REPORTAR INCIDENCIA", Font = new Font("Segoe UI", 9, FontStyle.Bold), Location = new Point(15, 135), Size = new Size(340, 32), FlatStyle = FlatStyle.Flat, BackColor = Color.FromArgb(239, 68, 68), ForeColor = Color.White, Cursor = Cursors.Hand };
+            lblIncidentDesc = new Label { Text = "Detalles o Razón:", ForeColor = Color.FromArgb(64, 64, 64), Location = new Point(15, 75), Size = new Size(150, 18) };
+            txtIncidentDesc = new TextBox { Location = new Point(15, 95), Size = new Size(340, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
+            btnReportIncident = new Button { Text = "REPORTAR INCIDENCIA", Font = new Font("Segoe UI", 9, FontStyle.Bold), Location = new Point(15, 135), Size = new Size(340, 32), FlatStyle = FlatStyle.Flat, BackColor = Color.FromArgb(231, 76, 60), ForeColor = Color.White, Cursor = Cursors.Hand };
             btnReportIncident.FlatAppearance.BorderSize = 0;
             btnReportIncident.Click += btnReportIncident_Click;
             gbIncidents.Controls.AddRange(new Control[] { lblIncidentType, cbIncidentTypes, lblIncidentDesc, txtIncidentDesc, btnReportIncident });
 
-            
             gbReprogram = new GroupBox 
             { 
                 Text = "3. Reprogramar Fecha de Entrega", 
-                ForeColor = Color.FromArgb(245, 158, 11), 
+                ForeColor = Color.FromArgb(212, 120, 3), 
                 Font = new Font("Segoe UI", 9, FontStyle.Bold), 
                 Location = new Point(15, 290), 
-                Size = new Size(380, 155) 
+                Size = new Size(380, 155),
+                BackColor = Color.White
             };
             actionsContainer.Controls.Add(gbReprogram);
 
-            lblNuevaFecha = new Label { Text = "Nueva Fecha Propuesta:", ForeColor = Color.White, Location = new Point(15, 20), Size = new Size(150, 18) };
-            dtpNuevaFecha = new DateTimePicker { Location = new Point(15, 40), Size = new Size(150, 25), Format = DateTimePickerFormat.Short, BackColor = Color.FromArgb(15, 22, 17), ForeColor = Color.White, Value = DateTime.Now.AddDays(1) };
-            lblMotivo = new Label { Text = "Motivo de Aplazamiento:", ForeColor = Color.White, Location = new Point(180, 20), Size = new Size(150, 18) };
-            txtMotivo = new TextBox { Location = new Point(180, 40), Size = new Size(180, 23), BackColor = Color.FromArgb(15, 22, 17), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
-            btnReprogram = new Button { Text = "REPROGRAMAR ENTREGA", Font = new Font("Segoe UI", 9, FontStyle.Bold), Location = new Point(15, 105), Size = new Size(340, 32), FlatStyle = FlatStyle.Flat, BackColor = Color.FromArgb(245, 158, 11), ForeColor = Color.White, Cursor = Cursors.Hand };
+            lblNuevaFecha = new Label { Text = "Nueva Fecha Propuesta:", ForeColor = Color.FromArgb(64, 64, 64), Location = new Point(15, 20), Size = new Size(150, 18) };
+            dtpNuevaFecha = new DateTimePicker { Location = new Point(15, 40), Size = new Size(150, 25), Format = DateTimePickerFormat.Short, BackColor = Color.White, ForeColor = Color.Black, Value = DateTime.Now.AddDays(1) };
+            lblMotivo = new Label { Text = "Motivo de Aplazamiento:", ForeColor = Color.FromArgb(64, 64, 64), Location = new Point(180, 20), Size = new Size(150, 18) };
+            txtMotivo = new TextBox { Location = new Point(180, 40), Size = new Size(180, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
+            btnReprogram = new Button { Text = "REPROGRAMAR ENTREGA", Font = new Font("Segoe UI", 9, FontStyle.Bold), Location = new Point(15, 105), Size = new Size(340, 32), FlatStyle = FlatStyle.Flat, BackColor = Color.FromArgb(212, 120, 3), ForeColor = Color.White, Cursor = Cursors.Hand };
             btnReprogram.FlatAppearance.BorderSize = 0;
             btnReprogram.Click += btnReprogram_Click;
             gbReprogram.Controls.AddRange(new Control[] { lblNuevaFecha, dtpNuevaFecha, lblMotivo, txtMotivo, btnReprogram });
 
-            
-            lblEstado.ForeColor = Color.White;
-            lblIncidentType.ForeColor = Color.White;
-            lblIncidentDesc.ForeColor = Color.White;
-            lblNuevaFecha.ForeColor = Color.White;
-            lblMotivo.ForeColor = Color.White;
-
-            
             RefreshGrid();
         }
 

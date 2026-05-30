@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -34,16 +34,13 @@ namespace RapidoSurWinForms
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.BackColor = Color.FromArgb(10, 15, 30);
+            this.BackColor = Color.FromArgb(240, 244, 248);
 
-            
-            
-            
             Panel paramsPanel = new Panel
             {
                 Location = new Point(25, 20),
                 Size = new Size(885, 80),
-                BackColor = Color.FromArgb(20, 30, 55)
+                BackColor = Color.White
             };
             this.Controls.Add(paramsPanel);
 
@@ -51,7 +48,7 @@ namespace RapidoSurWinForms
             {
                 Text = "Tipo de Reporte:",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.FromArgb(150, 160, 180),
+                ForeColor = Color.FromArgb(100, 110, 120),
                 Location = new Point(20, 15),
                 Size = new Size(180, 18)
             };
@@ -60,8 +57,8 @@ namespace RapidoSurWinForms
                 Location = new Point(20, 36),
                 Size = new Size(200, 25),
                 DropDownStyle = ComboBoxStyle.DropDownList,
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 Font = new Font("Segoe UI", 9.5f)
             };
             cbReportType.Items.AddRange(new string[] { "Entregas", "Incidencias", "Flota", "Pedidos" });
@@ -71,7 +68,7 @@ namespace RapidoSurWinForms
             {
                 Text = "Fecha de Inicio:",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.FromArgb(150, 160, 180),
+                ForeColor = Color.FromArgb(100, 110, 120),
                 Location = new Point(250, 15),
                 Size = new Size(150, 18)
             };
@@ -80,8 +77,8 @@ namespace RapidoSurWinForms
                 Location = new Point(250, 36),
                 Size = new Size(150, 25),
                 Format = DateTimePickerFormat.Short,
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 Value = DateTime.Now.AddDays(-30)
             };
 
@@ -89,7 +86,7 @@ namespace RapidoSurWinForms
             {
                 Text = "Fecha de Fin:",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.FromArgb(150, 160, 180),
+                ForeColor = Color.FromArgb(100, 110, 120),
                 Location = new Point(430, 15),
                 Size = new Size(150, 18)
             };
@@ -98,8 +95,8 @@ namespace RapidoSurWinForms
                 Location = new Point(430, 36),
                 Size = new Size(150, 25),
                 Format = DateTimePickerFormat.Short,
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 Value = DateTime.Now
             };
 
@@ -110,7 +107,7 @@ namespace RapidoSurWinForms
                 Location = new Point(620, 28),
                 Size = new Size(240, 38),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(99, 102, 241),
+                BackColor = Color.FromArgb(41, 128, 185),
                 ForeColor = Color.White,
                 Cursor = Cursors.Hand
             };
@@ -119,14 +116,11 @@ namespace RapidoSurWinForms
 
             paramsPanel.Controls.AddRange(new Control[] { lblReportType, cbReportType, lblFechaInicio, dtpInicio, lblFechaFin, dtpFin, btnGenerar });
 
-            
-            
-            
             lblResults = new Label
             {
                 Text = "RESULTADOS DEL REPORTE GENERADO:",
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Location = new Point(25, 120),
                 Size = new Size(500, 20)
             };
@@ -136,9 +130,9 @@ namespace RapidoSurWinForms
             {
                 Location = new Point(25, 145),
                 Size = new Size(885, 345),
-                BackgroundColor = Color.FromArgb(20, 30, 55),
-                ForeColor = Color.White,
-                GridColor = Color.FromArgb(30, 45, 75),
+                BackgroundColor = Color.White,
+                ForeColor = Color.Black,
+                GridColor = Color.FromArgb(220, 224, 224),
                 BorderStyle = BorderStyle.None,
                 ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single,
                 EnableHeadersVisualStyles = false,
@@ -149,16 +143,15 @@ namespace RapidoSurWinForms
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             };
-            dgvReportResults.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 23, 42);
-            dgvReportResults.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvReportResults.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(235, 240, 245);
+            dgvReportResults.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(31, 58, 86);
             dgvReportResults.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9.5f, FontStyle.Bold);
-            dgvReportResults.DefaultCellStyle.BackColor = Color.FromArgb(20, 30, 55);
-            dgvReportResults.DefaultCellStyle.ForeColor = Color.White;
-            dgvReportResults.DefaultCellStyle.SelectionBackColor = Color.FromArgb(99, 102, 241);
+            dgvReportResults.DefaultCellStyle.BackColor = Color.White;
+            dgvReportResults.DefaultCellStyle.ForeColor = Color.Black;
+            dgvReportResults.DefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 128, 185);
             dgvReportResults.DefaultCellStyle.SelectionForeColor = Color.White;
             this.Controls.Add(dgvReportResults);
 
-            
             GenerateReport();
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -40,28 +40,45 @@ namespace RapidoSurWinForms
         private void InitializeComponent()
         {
             this.Text = "Rápido Sur S.R.L. - Acceso Personal";
-            this.Size = new Size(480, 520);
+            this.Size = new Size(480, 680);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.BackColor = Color.FromArgb(11, 15, 12); 
+            this.BackColor = Color.FromArgb(240, 244, 248); 
 
-            
+            PictureBox pbLogo = new PictureBox
+            {
+                Size = new Size(150, 150),
+                Location = new Point(165, 15),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Transparent
+            };
+
+            string logoPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "logo.png");
+            if (!System.IO.File.Exists(logoPath))
+            {
+                logoPath = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Assets", "logo.png");
+            }
+            if (System.IO.File.Exists(logoPath))
+            {
+                pbLogo.Image = Image.FromFile(logoPath);
+            }
+            this.Controls.Add(pbLogo);
+
             cardPanel = new Panel
             {
                 Size = new Size(410, 440),
-                Location = new Point(25, 25),
-                BackColor = Color.FromArgb(20, 28, 22), 
+                Location = new Point(25, 180),
+                BackColor = Color.White, 
                 BorderStyle = BorderStyle.None
             };
             this.Controls.Add(cardPanel);
 
-            
             titleLabel = new Label
             {
                 Text = "ACCESO AL SISTEMA",
                 Font = new Font("Segoe UI", 16, FontStyle.Bold),
-                ForeColor = Color.FromArgb(57, 211, 83), 
+                ForeColor = Color.FromArgb(31, 58, 86), 
                 Location = new Point(20, 20),
                 Size = new Size(370, 35),
                 TextAlign = ContentAlignment.MiddleCenter
@@ -72,14 +89,13 @@ namespace RapidoSurWinForms
             {
                 Text = "Rápido Sur S.R.L. - Control Logístico",
                 Font = new Font("Segoe UI", 9, FontStyle.Regular),
-                ForeColor = Color.FromArgb(140, 160, 145), 
+                ForeColor = Color.FromArgb(100, 110, 120), 
                 Location = new Point(20, 55),
                 Size = new Size(370, 20),
                 TextAlign = ContentAlignment.MiddleCenter
             };
             cardPanel.Controls.Add(subTitleLabel);
 
-            
             btnTabOperador = new Button
             {
                 Text = "Operador / Admin",
@@ -87,8 +103,8 @@ namespace RapidoSurWinForms
                 Location = new Point(20, 95),
                 Size = new Size(180, 36),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(57, 211, 83),
-                ForeColor = Color.Black, 
+                BackColor = Color.FromArgb(41, 128, 185),
+                ForeColor = Color.White, 
                 Cursor = Cursors.Hand
             };
             btnTabOperador.FlatAppearance.BorderSize = 0;
@@ -102,17 +118,14 @@ namespace RapidoSurWinForms
                 Location = new Point(210, 95),
                 Size = new Size(180, 36),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(30, 42, 33), 
-                ForeColor = Color.FromArgb(170, 190, 175),
+                BackColor = Color.FromArgb(220, 224, 224), 
+                ForeColor = Color.FromArgb(64, 64, 64),
                 Cursor = Cursors.Hand
             };
             btnTabConductor.FlatAppearance.BorderSize = 0;
             btnTabConductor.Click += (s, e) => SwitchTab("Conductor");
             cardPanel.Controls.Add(btnTabConductor);
 
-            
-            
-            
             panelOperador = new Panel
             {
                 Location = new Point(20, 150),
@@ -125,7 +138,7 @@ namespace RapidoSurWinForms
             {
                 Text = "Nombre de Usuario:",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(64, 64, 64),
                 Location = new Point(0, 10),
                 Size = new Size(370, 20)
             };
@@ -134,8 +147,8 @@ namespace RapidoSurWinForms
                 Font = new Font("Segoe UI", 11),
                 Location = new Point(0, 32),
                 Size = new Size(370, 28),
-                BackColor = Color.FromArgb(15, 22, 17), 
-                ForeColor = Color.White,
+                BackColor = Color.White, 
+                ForeColor = Color.Black,
                 BorderStyle = BorderStyle.FixedSingle,
                 Text = "lcontreras" 
             };
@@ -146,7 +159,7 @@ namespace RapidoSurWinForms
             {
                 Text = "Contraseña:",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(64, 64, 64),
                 Location = new Point(0, 75),
                 Size = new Size(370, 20)
             };
@@ -155,8 +168,8 @@ namespace RapidoSurWinForms
                 Font = new Font("Segoe UI", 11),
                 Location = new Point(0, 97),
                 Size = new Size(370, 28),
-                BackColor = Color.FromArgb(15, 22, 17),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 BorderStyle = BorderStyle.FixedSingle,
                 PasswordChar = '•',
                 Text = "lcontreras123" 
@@ -164,9 +177,6 @@ namespace RapidoSurWinForms
             panelOperador.Controls.Add(lblClave);
             panelOperador.Controls.Add(txtClave);
 
-            
-            
-            
             panelConductor = new Panel
             {
                 Location = new Point(20, 150),
@@ -180,7 +190,7 @@ namespace RapidoSurWinForms
             {
                 Text = "Seleccione su Nombre:",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(64, 64, 64),
                 Location = new Point(0, 25),
                 Size = new Size(370, 20)
             };
@@ -189,16 +199,13 @@ namespace RapidoSurWinForms
                 Font = new Font("Segoe UI", 11),
                 Location = new Point(0, 50),
                 Size = new Size(370, 28),
-                BackColor = Color.FromArgb(15, 22, 17),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             panelConductor.Controls.Add(lblConductor);
             panelConductor.Controls.Add(cbConductor);
 
-            
-            
-            
             btnLogin = new Button
             {
                 Text = "INGRESAR AL SISTEMA",
@@ -206,27 +213,25 @@ namespace RapidoSurWinForms
                 Location = new Point(20, 320),
                 Size = new Size(370, 46),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(57, 211, 83), 
-                ForeColor = Color.Black, 
+                BackColor = Color.FromArgb(41, 128, 185), 
+                ForeColor = Color.White, 
                 Cursor = Cursors.Hand
             };
             btnLogin.FlatAppearance.BorderSize = 0;
             btnLogin.Click += btnLogin_Click;
             cardPanel.Controls.Add(btnLogin);
 
-            
             lblDemoInfo = new Label
             {
                 Text = "Demo Admin: usuario: lcontreras | clave: lcontreras123",
                 Font = new Font("Segoe UI", 8, FontStyle.Italic),
-                ForeColor = Color.FromArgb(130, 140, 160),
+                ForeColor = Color.FromArgb(100, 110, 120),
                 Location = new Point(20, 385),
                 Size = new Size(370, 35),
                 TextAlign = ContentAlignment.MiddleCenter
             };
             cardPanel.Controls.Add(lblDemoInfo);
 
-            
             LoadConductors();
         }
 
@@ -250,10 +255,10 @@ namespace RapidoSurWinForms
             _userType = type;
             if (type == "Operador")
             {
-                btnTabOperador.BackColor = Color.FromArgb(57, 211, 83);
-                btnTabOperador.ForeColor = Color.Black;
-                btnTabConductor.BackColor = Color.FromArgb(30, 42, 33);
-                btnTabConductor.ForeColor = Color.FromArgb(170, 190, 175);
+                btnTabOperador.BackColor = Color.FromArgb(41, 128, 185);
+                btnTabOperador.ForeColor = Color.White;
+                btnTabConductor.BackColor = Color.FromArgb(220, 224, 224);
+                btnTabConductor.ForeColor = Color.FromArgb(64, 64, 64);
 
                 panelOperador.Visible = true;
                 panelConductor.Visible = false;
@@ -261,10 +266,10 @@ namespace RapidoSurWinForms
             }
             else
             {
-                btnTabOperador.BackColor = Color.FromArgb(30, 42, 33);
-                btnTabOperador.ForeColor = Color.FromArgb(170, 190, 175);
-                btnTabConductor.BackColor = Color.FromArgb(57, 211, 83);
-                btnTabConductor.ForeColor = Color.Black;
+                btnTabOperador.BackColor = Color.FromArgb(220, 224, 224);
+                btnTabOperador.ForeColor = Color.FromArgb(64, 64, 64);
+                btnTabConductor.BackColor = Color.FromArgb(41, 128, 185);
+                btnTabConductor.ForeColor = Color.White;
 
                 panelOperador.Visible = false;
                 panelConductor.Visible = true;

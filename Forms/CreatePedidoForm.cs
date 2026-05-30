@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -58,14 +58,13 @@ namespace RapidoSurWinForms
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.BackColor = Color.FromArgb(10, 15, 30);
+            this.BackColor = Color.FromArgb(240, 244, 248);
 
-            
             rbClienteExistente = new RadioButton
             {
                 Text = "Cliente Registrado",
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Location = new Point(25, 20),
                 Size = new Size(180, 25),
                 Checked = true
@@ -77,20 +76,17 @@ namespace RapidoSurWinForms
             {
                 Text = "Crear Cliente Nuevo",
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Location = new Point(220, 20),
                 Size = new Size(180, 25)
             };
             this.Controls.Add(rbClienteNuevo);
 
-            
-            
-            
             panelClienteExistente = new Panel
             {
                 Location = new Point(25, 55),
                 Size = new Size(430, 70),
-                BackColor = Color.FromArgb(20, 30, 55)
+                BackColor = Color.White
             };
             this.Controls.Add(panelClienteExistente);
 
@@ -98,7 +94,7 @@ namespace RapidoSurWinForms
             {
                 Text = "Seleccione el Cliente:",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.FromArgb(150, 160, 180),
+                ForeColor = Color.FromArgb(100, 110, 120),
                 Location = new Point(15, 10),
                 Size = new Size(400, 18)
             };
@@ -108,91 +104,82 @@ namespace RapidoSurWinForms
                 Location = new Point(15, 30),
                 Size = new Size(400, 25),
                 DropDownStyle = ComboBoxStyle.DropDownList,
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White
+                BackColor = Color.White,
+                ForeColor = Color.Black
             };
             panelClienteExistente.Controls.Add(lblSelectCliente);
             panelClienteExistente.Controls.Add(cbClientes);
 
-            
-            
-            
             panelClienteNuevo = new Panel
             {
                 Location = new Point(25, 55),
                 Size = new Size(430, 185),
-                BackColor = Color.FromArgb(20, 30, 55),
+                BackColor = Color.White,
                 Visible = false
             };
             this.Controls.Add(panelClienteNuevo);
 
-            lblNombre = new Label { Text = "Nombre:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 10), Size = new Size(180, 18) };
-            txtNombre = new TextBox { Location = new Point(15, 30), Size = new Size(180, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
-            lblApellido = new Label { Text = "Apellido:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(220, 10), Size = new Size(185, 18) };
-            txtApellido = new TextBox { Location = new Point(220, 30), Size = new Size(195, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
+            lblNombre = new Label { Text = "Nombre:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 10), Size = new Size(180, 18) };
+            txtNombre = new TextBox { Location = new Point(15, 30), Size = new Size(180, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
+            lblApellido = new Label { Text = "Apellido:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(220, 10), Size = new Size(185, 18) };
+            txtApellido = new TextBox { Location = new Point(220, 30), Size = new Size(195, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
 
-            lblTelefono = new Label { Text = "Teléfono:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 65), Size = new Size(180, 18) };
-            txtTelefono = new TextBox { Location = new Point(15, 85), Size = new Size(180, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
-            lblCorreo = new Label { Text = "Correo:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(220, 65), Size = new Size(185, 18) };
-            txtCorreo = new TextBox { Location = new Point(220, 85), Size = new Size(195, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
+            lblTelefono = new Label { Text = "Teléfono:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 65), Size = new Size(180, 18) };
+            txtTelefono = new TextBox { Location = new Point(15, 85), Size = new Size(180, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
+            lblCorreo = new Label { Text = "Correo:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(220, 65), Size = new Size(185, 18) };
+            txtCorreo = new TextBox { Location = new Point(220, 85), Size = new Size(195, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
 
-            lblDireccion = new Label { Text = "Dirección de Facturación:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 120), Size = new Size(390, 18) };
-            txtDireccion = new TextBox { Location = new Point(15, 140), Size = new Size(400, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
+            lblDireccion = new Label { Text = "Dirección de Facturación:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 120), Size = new Size(390, 18) };
+            txtDireccion = new TextBox { Location = new Point(15, 140), Size = new Size(400, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
 
             panelClienteNuevo.Controls.AddRange(new Control[] { lblNombre, txtNombre, lblApellido, txtApellido, lblTelefono, txtTelefono, lblCorreo, txtCorreo, lblDireccion, txtDireccion });
 
-            
-            
-            
             gbPedido = new GroupBox
             {
                 Text = "Detalles de la Carga y Entrega",
-                ForeColor = Color.FromArgb(99, 102, 241),
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 Location = new Point(25, 260),
                 Size = new Size(430, 260)
             };
             this.Controls.Add(gbPedido);
 
-            lblDireccionEntrega = new Label { Text = "Dirección de Entrega:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 25), Size = new Size(400, 18) };
-            txtDireccionEntrega = new TextBox { Location = new Point(15, 45), Size = new Size(400, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
+            lblDireccionEntrega = new Label { Text = "Dirección de Entrega:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 25), Size = new Size(400, 18) };
+            txtDireccionEntrega = new TextBox { Location = new Point(15, 45), Size = new Size(400, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
 
-            lblTipoCarga = new Label { Text = "Tipo de Mercancía:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 80), Size = new Size(180, 18) };
-            txtTipoCarga = new TextBox { Location = new Point(15, 100), Size = new Size(180, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle, PlaceholderText = "Ej. Alimentos, Muebles" };
+            lblTipoCarga = new Label { Text = "Tipo de Mercancía:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 80), Size = new Size(180, 18) };
+            txtTipoCarga = new TextBox { Location = new Point(15, 100), Size = new Size(180, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle, PlaceholderText = "Ej. Alimentos, Muebles" };
 
-            lblPesoKg = new Label { Text = "Peso de la Carga (kg):", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(220, 80), Size = new Size(195, 18) };
+            lblPesoKg = new Label { Text = "Peso de la Carga (kg):", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(220, 80), Size = new Size(195, 18) };
             numPesoKg = new NumericUpDown
             {
                 Location = new Point(220, 100),
                 Size = new Size(195, 23),
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 Minimum = 1,
                 Maximum = 99999,
                 DecimalPlaces = 2,
                 Value = 100
             };
 
-            lblPrioridad = new Label { Text = "Prioridad:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 140), Size = new Size(180, 18) };
+            lblPrioridad = new Label { Text = "Prioridad:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 140), Size = new Size(180, 18) };
             cbPrioridad = new ComboBox
             {
                 Location = new Point(15, 160),
                 Size = new Size(180, 23),
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             cbPrioridad.Items.AddRange(new string[] { "Baja", "Media", "Alta" });
             cbPrioridad.SelectedIndex = 1; 
 
-            lblObservaciones = new Label { Text = "Observaciones / Indicaciones Especiales:", ForeColor = Color.White, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 195), Size = new Size(400, 18) };
-            txtObservaciones = new TextBox { Location = new Point(15, 215), Size = new Size(400, 23), BackColor = Color.FromArgb(15, 23, 42), ForeColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
+            lblObservaciones = new Label { Text = "Observaciones / Indicaciones Especiales:", ForeColor = Color.FromArgb(64, 64, 64), Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), Location = new Point(15, 195), Size = new Size(400, 18) };
+            txtObservaciones = new TextBox { Location = new Point(15, 215), Size = new Size(400, 23), BackColor = Color.White, ForeColor = Color.Black, BorderStyle = BorderStyle.FixedSingle };
 
             gbPedido.Controls.AddRange(new Control[] { lblDireccionEntrega, txtDireccionEntrega, lblTipoCarga, txtTipoCarga, lblPesoKg, numPesoKg, lblPrioridad, cbPrioridad, lblObservaciones, txtObservaciones });
 
-            
-            
-            
             btnGuardar = new Button
             {
                 Text = "GUARDAR PEDIDO",
@@ -200,7 +187,7 @@ namespace RapidoSurWinForms
                 Location = new Point(25, 540),
                 Size = new Size(210, 42),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(99, 102, 241),
+                BackColor = Color.FromArgb(41, 128, 185),
                 ForeColor = Color.White,
                 Cursor = Cursors.Hand
             };
@@ -215,15 +202,14 @@ namespace RapidoSurWinForms
                 Location = new Point(245, 540),
                 Size = new Size(210, 42),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(30, 45, 75),
-                ForeColor = Color.FromArgb(180, 190, 210),
+                BackColor = Color.FromArgb(220, 224, 224),
+                ForeColor = Color.FromArgb(64, 64, 64),
                 Cursor = Cursors.Hand
             };
             btnCancelar.FlatAppearance.BorderSize = 0;
             btnCancelar.Click += (s, e) => this.Close();
             this.Controls.Add(btnCancelar);
 
-            
             LoadClients();
             ToggleClientType();
         }

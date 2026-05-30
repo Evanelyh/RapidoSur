@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -47,16 +47,13 @@ namespace RapidoSurWinForms
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.BackColor = Color.FromArgb(10, 15, 30);
+            this.BackColor = Color.FromArgb(240, 244, 248);
 
-            
-            
-            
             lblSearch = new Label
             {
                 Text = "INGRESE EL NÚMERO / ID DE PEDIDO QUE LE PROPORCIONÓ LA EMPRESA:",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.FromArgb(150, 160, 180),
+                ForeColor = Color.FromArgb(100, 110, 120),
                 Location = new Point(25, 20),
                 Size = new Size(600, 20)
             };
@@ -67,8 +64,8 @@ namespace RapidoSurWinForms
                 Font = new Font("Segoe UI", 12),
                 Location = new Point(25, 45),
                 Size = new Size(580, 29),
-                BackColor = Color.FromArgb(15, 23, 42),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 BorderStyle = BorderStyle.FixedSingle
             };
             this.Controls.Add(txtPedidoId);
@@ -80,7 +77,7 @@ namespace RapidoSurWinForms
                 Location = new Point(620, 44),
                 Size = new Size(135, 31),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(99, 102, 241),
+                BackColor = Color.FromArgb(41, 128, 185),
                 ForeColor = Color.White,
                 Cursor = Cursors.Hand
             };
@@ -88,14 +85,11 @@ namespace RapidoSurWinForms
             btnRastrear.Click += btnRastrear_Click;
             this.Controls.Add(btnRastrear);
 
-            
-            
-            
             panelNotFound = new Panel
             {
                 Location = new Point(25, 100),
                 Size = new Size(730, 350),
-                BackColor = Color.FromArgb(20, 30, 55),
+                BackColor = Color.White,
                 Visible = false
             };
             this.Controls.Add(panelNotFound);
@@ -113,21 +107,18 @@ namespace RapidoSurWinForms
             {
                 Text = "El código ingresado no existe en nuestro sistema logístico.\n\nPor favor, valide el número de despacho e intente nuevamente.",
                 Font = new Font("Segoe UI", 10),
-                ForeColor = Color.FromArgb(180, 190, 210),
+                ForeColor = Color.FromArgb(100, 110, 120),
                 Location = new Point(20, 140),
                 Size = new Size(690, 80),
                 TextAlign = ContentAlignment.MiddleCenter
             };
             panelNotFound.Controls.AddRange(new Control[] { lblNotFoundTitle, lblNotFoundDesc });
 
-            
-            
-            
             panelPending = new Panel
             {
                 Location = new Point(25, 100),
                 Size = new Size(730, 350),
-                BackColor = Color.FromArgb(20, 30, 55),
+                BackColor = Color.White,
                 Visible = false
             };
             this.Controls.Add(panelPending);
@@ -136,7 +127,7 @@ namespace RapidoSurWinForms
             {
                 Text = "⚠️ PEDIDO EN COLA DE ESPERA",
                 Font = new Font("Segoe UI", 14, FontStyle.Bold),
-                ForeColor = Color.FromArgb(245, 158, 11),
+                ForeColor = Color.FromArgb(212, 120, 3),
                 Location = new Point(20, 60),
                 Size = new Size(690, 30),
                 TextAlign = ContentAlignment.MiddleCenter
@@ -145,16 +136,13 @@ namespace RapidoSurWinForms
             {
                 Text = "El pedido ha sido recibido con éxito en nuestras sucursales y se encuentra en estado 'PENDIENTE'.\n\nActualmente nuestro equipo de logística está organizando la carga y asignando un vehículo de la flota libre.\n\nLe sugerimos volver a rastrear en unos minutos para ver su hoja de ruta asignada.",
                 Font = new Font("Segoe UI", 10.5f),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(64, 64, 64),
                 Location = new Point(50, 110),
                 Size = new Size(630, 180),
                 TextAlign = ContentAlignment.MiddleCenter
             };
             panelPending.Controls.AddRange(new Control[] { lblPendingTitle, lblPendingDesc });
 
-            
-            
-            
             panelDetails = new Panel
             {
                 Location = new Point(25, 100),
@@ -168,9 +156,10 @@ namespace RapidoSurWinForms
             {
                 Text = "Ficha Descriptiva del Envío",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.FromArgb(99, 102, 241),
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Location = new Point(0, 0),
-                Size = new Size(350, 330)
+                Size = new Size(350, 330),
+                BackColor = Color.White
             };
             panelDetails.Controls.Add(gbFicha);
 
@@ -179,7 +168,7 @@ namespace RapidoSurWinForms
                 Text = "ESTADO",
                 Font = new Font("Segoe UI", 11, FontStyle.Bold),
                 ForeColor = Color.White,
-                BackColor = Color.FromArgb(99, 102, 241),
+                BackColor = Color.FromArgb(41, 128, 185),
                 Location = new Point(20, 25),
                 Size = new Size(310, 30),
                 TextAlign = ContentAlignment.MiddleCenter
@@ -199,9 +188,10 @@ namespace RapidoSurWinForms
             {
                 Text = "Línea de Tiempo del Historial de Ruta",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.FromArgb(99, 102, 241),
+                ForeColor = Color.FromArgb(31, 58, 86),
                 Location = new Point(370, 0),
-                Size = new Size(360, 330)
+                Size = new Size(360, 330),
+                BackColor = Color.White
             };
             panelDetails.Controls.Add(gbHistorial);
 
@@ -209,8 +199,8 @@ namespace RapidoSurWinForms
             {
                 Location = new Point(15, 25),
                 Size = new Size(330, 290),
-                BackColor = Color.FromArgb(20, 30, 55),
-                ForeColor = Color.White,
+                BackColor = Color.White,
+                ForeColor = Color.Black,
                 Font = new Font("Segoe UI", 9),
                 BorderStyle = BorderStyle.None,
                 HorizontalScrollbar = true
@@ -224,7 +214,7 @@ namespace RapidoSurWinForms
             {
                 Text = $"{title} Loading...",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Regular),
-                ForeColor = Color.White,
+                ForeColor = Color.FromArgb(64, 64, 64),
                 Location = new Point(20, top),
                 Size = new Size(310, 35)
             };
