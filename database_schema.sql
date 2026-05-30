@@ -141,8 +141,8 @@ INSERT INTO pedido (id_cliente, fecha_solicitud, direccion_entrega, tipo_carga, 
 (8, '2026-03-11 15:30:00', 'Urbaniz. Altos #55, Santa Tecla', 'Alimentos', 200.00, 'Media', 'Asignado', 'Entregar por la tarde'),
 (9, '2026-03-12 11:00:00', 'Bo. Candelaria #8, San Salvador', 'Electrónica', 290.00, 'Alta', 'Pendiente', 'Equipos delicados'),
 (10, '2026-03-13 13:40:00', 'Col. Atlacatl #33, San Salvador', 'Ropa', 110.00, 'Baja', 'Pendiente', 'Bolsas selladas'),
-(11, '2026-03-14 10:15:00', 'Res. Bello Horizonte, San Salvador', 'Alimentos', 180.00, 'Media', 'Pendiente', 'Cajas de abarrotes'),
-(12, '2026-03-15 16:00:00', 'Bo. La Vega #17, San Salvador', 'Ferretería', 650.00, 'Media', 'Pendiente', 'Herramientas de construcción');
+(1, '2026-03-14 10:15:00', 'Res. Bello Horizonte, San Salvador', 'Alimentos', 180.00, 'Media', 'Pendiente', 'Cajas de abarrotes'),
+(3, '2026-03-15 16:00:00', 'Bo. La Vega #17, San Salvador', 'Ferretería', 650.00, 'Media', 'Pendiente', 'Herramientas de construcción');
 
 INSERT INTO envio (id_pedido, id_vehiculo, id_conductor, id_operador, fecha_asignacion, fecha_entrega_estimada, fecha_entrega_real, ruta_descripcion, estado_envio) VALUES
 (1, 1, 1, 1, '2026-03-01 10:00:00', '2026-03-02', '2026-03-02', 'Ruta San Salvador Centro - Colonia San Benito', 'Entregado'),
