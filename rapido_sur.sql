@@ -1,3 +1,11 @@
+IF OBJECT_ID('dbo.historial_estado', 'U') IS NOT NULL DROP TABLE dbo.historial_estado;
+IF OBJECT_ID('dbo.envio', 'U') IS NOT NULL DROP TABLE dbo.envio;
+IF OBJECT_ID('dbo.pedido', 'U') IS NOT NULL DROP TABLE dbo.pedido;
+IF OBJECT_ID('dbo.cliente', 'U') IS NOT NULL DROP TABLE dbo.cliente;
+IF OBJECT_ID('dbo.vehiculo', 'U') IS NOT NULL DROP TABLE dbo.vehiculo;
+IF OBJECT_ID('dbo.conductor', 'U') IS NOT NULL DROP TABLE dbo.conductor;
+IF OBJECT_ID('dbo.operador', 'U') IS NOT NULL DROP TABLE dbo.operador;
+
 CREATE TABLE cliente (
     id_cliente INT IDENTITY(1,1) PRIMARY KEY,
     nombre VARCHAR(60) NOT NULL,
