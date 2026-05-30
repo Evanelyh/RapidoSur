@@ -1,32 +1,3 @@
--- ==========================================
--- SCRIPT DE BASE DE DATOS: rapido_sur
--- PROYECTO DE CÁTEDRA ADS FASE III FINAL
--- UNIVERSIDAD DON BOSCO
--- ==========================================
-
--- Crear base de datos si no existe
-CREATE DATABASE IF NOT EXISTS rapido_sur;
-USE rapido_sur;
-
--- Evitar errores de eliminación por llaves foráneas
-SET FOREIGN_KEY_CHECKS = 0;
-
--- Borrar tablas si existen en orden inverso de dependencia
-DROP TABLE IF EXISTS historial_estado;
-DROP TABLE IF EXISTS envio;
-DROP TABLE IF EXISTS operador;
-DROP TABLE IF EXISTS conductor;
-DROP TABLE IF EXISTS vehiculo;
-DROP TABLE IF EXISTS pedido;
-DROP TABLE IF EXISTS cliente;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
--- ==========================================
--- 1. CREACIÓN DE TABLAS
--- ==========================================
-
--- Tabla: CLIENTE
 CREATE TABLE cliente (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(60) NOT NULL,
@@ -37,7 +8,6 @@ CREATE TABLE cliente (
     fecha_registro DATE NOT NULL DEFAULT (CURRENT_DATE)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabla: PEDIDO
 CREATE TABLE pedido (
     id_pedido INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT NOT NULL,
@@ -52,7 +22,6 @@ CREATE TABLE pedido (
         REFERENCES cliente(id_cliente) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabla: VEHICULO
 CREATE TABLE vehiculo (
     id_vehiculo INT AUTO_INCREMENT PRIMARY KEY,
     placa VARCHAR(15) UNIQUE NOT NULL,
@@ -64,7 +33,6 @@ CREATE TABLE vehiculo (
     anio INT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabla: CONDUCTOR
 CREATE TABLE conductor (
     id_conductor INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(60) NOT NULL,
@@ -76,7 +44,6 @@ CREATE TABLE conductor (
     fecha_ingreso DATE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabla: OPERADOR
 CREATE TABLE operador (
     id_operador INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(60) NOT NULL,
@@ -87,7 +54,6 @@ CREATE TABLE operador (
     correo VARCHAR(100)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabla: ENVIO
 CREATE TABLE envio (
     id_envio INT AUTO_INCREMENT PRIMARY KEY,
     id_pedido INT NOT NULL,
@@ -109,7 +75,6 @@ CREATE TABLE envio (
         REFERENCES operador(id_operador) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabla: HISTORIAL_ESTADO
 CREATE TABLE historial_estado (
     id_historial INT AUTO_INCREMENT PRIMARY KEY,
     id_envio INT NOT NULL,
@@ -121,12 +86,6 @@ CREATE TABLE historial_estado (
         REFERENCES envio(id_envio) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
--- ==========================================
--- 2. INSERCIÓN DE DATOS DE PRUEBA (60+ Registros)
--- ==========================================
-
--- 2.1 Tabla: CLIENTE (10 registros)
 INSERT INTO cliente (id_cliente, nombre, apellido, telefono, correo, direccion, fecha_registro) VALUES
 (1, 'Carlos', 'Martínez', '7823-1100', 'cmartinez@gmail.com', 'Colonia Escalón, San Salvador', '2026-01-10'),
 (2, 'Laura', 'Pérez', '6712-2200', 'lperez@hotmail.com', 'Residencial Santa Elena, Antiguo Cuscatlán', '2026-01-12'),
@@ -139,7 +98,6 @@ INSERT INTO cliente (id_cliente, nombre, apellido, telefono, correo, direccion, 
 (9, 'Esteban', 'Cruz', '7190-9900', 'ecruz@gmail.com', 'Col. Quiñónez, San Salvador', '2026-02-20'),
 (10, 'Patricia', 'Vásquez', '7201-0011', 'pvasquez@gmail.com', 'Residencial Altavista, Antiguo Cuscatlán', '2026-02-25');
 
--- 2.2 Tabla: VEHICULO (8 registros)
 INSERT INTO vehiculo (id_vehiculo, placa, tipo, capacidad_carga_kg, estado_operativo, marca, modelo, anio) VALUES
 (1, 'P-123-ABC', 'Camión', 5000.00, 'Disponible', 'Toyota', 'Dyna', 2019),
 (2, 'P-456-DEF', 'Furgoneta', 2000.00, 'Disponible', 'Hyundai', 'H100', 2020),
@@ -150,7 +108,6 @@ INSERT INTO vehiculo (id_vehiculo, placa, tipo, capacidad_carga_kg, estado_opera
 (7, 'P-111-STU', 'Furgoneta', 2500.00, 'En Ruta', 'Ford', 'Transit', 2020),
 (8, 'P-222-VWX', 'Camioneta', 1200.00, 'Disponible', 'Toyota', 'Hilux', 2023);
 
--- 2.3 Tabla: CONDUCTOR (6 registros)
 INSERT INTO conductor (id_conductor, nombre, apellido, num_licencia, tipo_licencia, telefono, disponible, fecha_ingreso) VALUES
 (1, 'Miguel', 'Argueta', 'LIC-001-SV', 'Liviana', '7312-1122', TRUE, '2020-03-15'),
 (2, 'Héctor', 'Juárez', 'LIC-002-SV', 'Pesada', '7423-2233', FALSE, '2019-07-20'),
@@ -159,14 +116,12 @@ INSERT INTO conductor (id_conductor, nombre, apellido, num_licencia, tipo_licenc
 (5, 'Oscar', 'Chávez', 'LIC-005-SV', 'Liviana', '7756-5566', FALSE, '2022-06-18'),
 (6, 'Pedro', 'Aguilar', 'LIC-006-SV', 'Pesada', '7867-6677', TRUE, '2020-09-30');
 
--- 2.4 Tabla: OPERADOR (4 registros - las claves son de prueba en texto plano para fácil acceso)
 INSERT INTO operador (id_operador, nombre, apellido, usuario, clave, rol, correo) VALUES
 (1, 'Andrea', 'Solano', 'asolano', 'asolano123', 'Operador', 'asolano@rapidosur.com'),
 (2, 'Luis', 'Contreras', 'lcontreras', 'lcontreras123', 'Administrador', 'lcontreras@rapidosur.com'),
 (3, 'Diana', 'Morales', 'dmorales', 'dmorales123', 'Operador', 'dmorales@rapidosur.com'),
 (4, 'René', 'Escobar', 'rescobar', 'rescobar123', 'Administrador', 'rescobar@rapidosur.com');
 
--- 2.5 Tabla: PEDIDO (12 registros)
 INSERT INTO pedido (id_pedido, id_cliente, fecha_solicitud, direccion_entrega, tipo_carga, peso_kg, prioridad, estado, observaciones) VALUES
 (1, 1, '2026-03-01 08:30:00', 'Col. San Benito #12, San Salvador', 'Electrónica', 320.00, 'Alta', 'Entregado', 'Entregar en horario de oficina'),
 (2, 2, '2026-03-02 09:15:00', 'Av. Roosevelt #45, San Miguel', 'Alimentos', 150.00, 'Media', 'Entregado', 'Carga refrigerada'),
@@ -181,7 +136,6 @@ INSERT INTO pedido (id_pedido, id_cliente, fecha_solicitud, direccion_entrega, t
 (11, 1, '2026-03-14 10:15:00', 'Res. Bello Horizonte, San Salvador', 'Alimentos', 180.00, 'Media', 'Pendiente', 'Cajas de abarrotes'),
 (12, 3, '2026-03-15 16:00:00', 'Bo. La Vega #17, San Salvador', 'Ferretería', 650.00, 'Media', 'Pendiente', 'Herramientas de construcción');
 
--- 2.6 Tabla: ENVIO (8 registros)
 INSERT INTO envio (id_envio, id_pedido, id_vehiculo, id_conductor, id_operador, fecha_asignacion, fecha_entrega_estimada, fecha_entrega_real, ruta_descripcion, estado_envio) VALUES
 (1, 1, 1, 1, 1, '2026-03-01 10:00:00', '2026-03-02', '2026-03-02', 'Ruta San Salvador Centro - Colonia San Benito', 'Entregado'),
 (2, 2, 2, 3, 2, '2026-03-02 10:30:00', '2026-03-03', '2026-03-03', 'Ruta Carretera de Oro - Carretera Panamericana hacia San Miguel', 'Entregado'),
@@ -192,7 +146,6 @@ INSERT INTO envio (id_envio, id_pedido, id_vehiculo, id_conductor, id_operador, 
 (7, 7, 2, 1, 2, '2026-03-10 15:00:00', '2026-03-11', NULL, 'Ruta Escalón - Flor Blanca San Salvador', 'Asignado'),
 (8, 8, 4, 6, 2, '2026-03-11 16:00:00', '2026-03-12', NULL, 'Carretera Panamericana - Santa Tecla Altos', 'Asignado');
 
--- 2.7 Tabla: HISTORIAL_ESTADO (12 registros)
 INSERT INTO historial_estado (id_historial, id_envio, estado, fecha_actualizacion, descripcion, registrado_por) VALUES
 (1, 1, 'Pendiente', '2026-03-01 08:30:00', 'Pedido recibido en el sistema web', 'Cliente'),
 (2, 1, 'Asignado', '2026-03-01 10:00:00', 'Vehículo Dyna (P-123-ABC) y Conductor Miguel Argueta asignados', 'Andrea Solano'),
@@ -206,7 +159,3 @@ INSERT INTO historial_estado (id_historial, id_envio, estado, fecha_actualizacio
 (10, 5, 'Asignado', '2026-03-07 09:15:00', 'Operador asignó Camión Isuzu (P-789-GHI) y conductor Héctor Juárez', 'Luis Contreras'),
 (11, 5, 'En Ruta', '2026-03-07 10:00:00', 'Conductor inició el trayecto hacia Santa Ana', 'Héctor Juárez'),
 (12, 6, 'Pendiente', '2026-03-08 09:00:00', 'Pedido de muebles registrado en sucursal', 'Andrea Solano');
-
--- ==========================================
--- FIN DEL SCRIPT DE BASE DE DATOS
--- ==========================================
