@@ -13,13 +13,13 @@ CREATE TABLE cliente (
     telefono VARCHAR(15),
     correo VARCHAR(100),
     direccion VARCHAR(200),
-    fecha_registro DATE NOT NULL DEFAULT GETDATE()
+    fecha_registro DATE NOT NULL DEFAULT (GETDATE())
 );
 
 CREATE TABLE pedido (
     id_pedido INT IDENTITY(1,1) PRIMARY KEY,
     id_cliente INT NOT NULL,
-    fecha_solicitud DATETIME NOT NULL DEFAULT GETDATE(),
+    fecha_solicitud DATETIME NOT NULL DEFAULT (GETDATE()),
     direccion_entrega VARCHAR(200) NOT NULL,
     tipo_carga VARCHAR(80),
     peso_kg DECIMAL(8,2) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE envio (
     id_vehiculo INT NOT NULL,
     id_conductor INT NOT NULL,
     id_operador INT NOT NULL,
-    fecha_asignacion DATETIME NOT NULL DEFAULT GETDATE(),
+    fecha_asignacion DATETIME NOT NULL DEFAULT (GETDATE()),
     fecha_entrega_estimada DATE,
     fecha_entrega_real DATE NULL,
     ruta_descripcion VARCHAR(MAX),
@@ -87,7 +87,7 @@ CREATE TABLE historial_estado (
     id_historial INT IDENTITY(1,1) PRIMARY KEY,
     id_envio INT NOT NULL,
     estado VARCHAR(30) NOT NULL,
-    fecha_actualizacion DATETIME NOT NULL DEFAULT GETDATE(),
+    fecha_actualizacion DATETIME NOT NULL DEFAULT (GETDATE()),
     descripcion VARCHAR(MAX),
     registrado_por VARCHAR(60),
     CONSTRAINT fk_historial_envio FOREIGN KEY (id_envio) 
